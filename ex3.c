@@ -17,7 +17,6 @@ int main () {
 
 	gets(name);
 
-
 	// 루프 생성
 	while(h == 0)
 	{
@@ -97,5 +96,4 @@ int main () {
 	}
 
 	return 0;
-
 }

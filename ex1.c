@@ -17,7 +17,7 @@ int main () {
 
 		gets(z);
 
-		if ( strcmp(z, "가위") == 0 ) {
+		if ( strcmp( z, "가위") == 0 ) {
 			P = 0;
 			printf("사람: 가위 ");
 		} else if ( strcmp(z, "바위") == 0 ) {
