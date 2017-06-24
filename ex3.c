@@ -12,7 +12,7 @@ int main () {
     int bet = 0;
     char name[100];
     int highscore = coin;
-
+	
     printf("이름을 적으십시오: ");
 
 	gets(name);
