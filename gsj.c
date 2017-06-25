@@ -485,11 +485,8 @@ void playerOnSafe ( int s ) {
 
 void playerOnEnchant () {
 
-	// int coin = players[turn][0].coin;
 	int pearls = players[turn][0].statPearl;
 	int piece = players[turn][0].statPiece;
-
-	printf("hello\n");
 
 	printf("Player %c on Enchant!\n", players[turn][0].name );
 	printf("현재: %d 금화 %d 스텟구슬 %d 스텟조각입니다.\n", coin , pearls , piece);
