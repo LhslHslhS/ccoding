@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <math.h>1
+#include <math.h>
 
 #define R 15
 #define C 43
@@ -71,7 +71,7 @@ Sword Diamond = { "다이아", 4, 2, 60, "", false };
 Sword Iron = { "철", 3, 3, 45, "", false };
 Sword Stone = { "돌", 2, 4, 30, "", false };
 Sword Wood = { "나무", 1, 5, 15, "", false };
-Sword Fist = { "주먹", 0, -1, 0, "", false };
+Sword Fist = { "주먹", 0, -1, 10, "", false };
 
 Sword swords[4] = { Diamond, Iron, Stone, Wood };
 
@@ -84,8 +84,8 @@ Potion Mundane = {"이상한", 0, -1 };
 
 Potion potions[5] = { Swiftness, Power, Resistence, Healing, Regeneration };
 
-Player HyunseoPlayer = { R/2, 0, 'H', 30, {0, 0, 0}, 50, 0, Fist, (R+C)/2, 1, 1, "", 0, 0, Mundane, false, 0 };
-Player ChanhoPlayer = { R/2, C-1, 'A', 30, {0, 0, 0}, 50, 0, Fist, (R+C)/2, 1, 1, "", 0, 0, Mundane, false, 0 };
+Player HyunseoPlayer = { R/2, 0, 'H', 30, {0, 0, 0}, 50, 0, Fist, (R+C)/2, 1, 1, "", 0, 0, Mundane, false, 0};
+Player ChanhoPlayer = { R/2, C-1, 'A', 30, {0, 0, 0}, 50, 0, Fist, (R+C)/2, 1, 1, "", 0, 0, Mundane, false, 0};
 
 // HyunseoPlayer.moves = 3*(R+C);
 // ChanhoPlayer.moves = 3*(R+C);
@@ -400,23 +400,61 @@ void playerOnPlayer ( int i ) {
 
 	int myType = players[turn][turnTeam].sword.type;
 	int yourType = players[1-turn][i].sword.type;
+
+	int myJob = players[turn][turnTeam].job;
+	int yourJob = players[1-turn][i].job;
+
 	printf("싸움이 일어났습니다.\n");
+	printf("%c(%d): %s vs %c(%d): %s\n", players[turn][turnTeam].name, players[turn][turnTeam].job, players[turn][turnTeam].sword.name,
+										 players[1-turn][i].name, players[1-turn][i].job, players[1-turn][i].sword.name);
 
 	int fightStatus;
 
+	if (yourJob != 5) {
+		if (myJob == 1) {
+			int pc = rand() % 2;
+			if (pc == 1) {
+				myType++;
+				printf("능력UP!\n");
+			} 
+		}
+		if (myJob == 2) {
+			int pc = rand() % 4;
+			if (pc != 1) {
+				myType++;
+				printf("능력UP!\n");
+			}
+		}
+	}
 
+	if (myJob != 5) {
+		if (yourJob == 1) {
+			int pc = rand() % 2;
+			if (pc == 1) {
+				yourType++;
+				printf("능력UP!\n");
+			} 
+		}
+		if (yourJob == 2) {
+			int pc = rand() % 4;
+			if (pc != 1) {
+				yourType++;
+				printf("능력UP!\n");
+			}
+		}
+	}
 
-
-
-
-
-
-
-
-
+	if (myType > yourType) {
+		fightStatus = 1;
+	} else if (myType < yourType) {
+		fightStatus = 2;
+	} else {
+		fightStatus = 0;
+	}
+	
 	if (fightStatus == 0) // Draw
 	{
-		printf("칼의 레벨이 같아 비겼습니다.\n");
+		printf("비겼습니다.\n");
 		return;
 	} else if (fightStatus == 1) // I Win
 	{
@@ -429,7 +467,9 @@ void playerOnPlayer ( int i ) {
 			players[turn][0].coin += players[turn][turnTeam].sword.strength;
 			players[1-turn][0].coin -= players[turn][turnTeam].sword.strength;
 		}
-		printf("%c(이)가 %c(을)를 %s칼로 이겼습니다.\n", players[turn][turnTeam].name, players[1-turn][i].name, players[turn][turnTeam].sword.name);
+		printf("----------\n");
+		printf("승리자: %c\n패배자: %c\n", players[turn][turnTeam].name, players[1-turn][i].name);
+		printf("----------\n");
 		players[1-turn][i].x = R/2;
 		players[1-turn][i].y = ( turn == 1 ) ? 0 : C-1;
 	} else { // I Lose
@@ -442,7 +482,9 @@ void playerOnPlayer ( int i ) {
 			players[1-turn][0].coin += players[1-turn][turnTeam].sword.strength;
 			players[turn][0].coin -= players[1-turn][turnTeam].sword.strength;
 		}
-		printf("%c(이)가 %c(을)를 %s칼로 이겼습니다.\n", players[1-turn][i].name, players[turn][turnTeam].name, players[1-turn][i].sword.name);
+		printf("----------\n");
+		printf("승리자: %c\n패배자: %c\n", players[1-turn][i].name, players[turn][turnTeam].name);
+		printf("----------\n");
 		qx = R/2;
 		qy = ( turn == 0 ) ? 0 : C-1;
 	}
@@ -485,6 +527,7 @@ void playerOnSafe ( int s ) {
 
 void playerOnEnchant () {
 
+	int coin = players[turn][0].coin;
 	int pearls = players[turn][0].statPearl;
 	int piece = players[turn][0].statPiece;
 
@@ -499,6 +542,8 @@ void playerOnEnchant () {
 	printf("5.Potion              50 coins             0 pearls\n");
 	printf("6.Stat Piece          3 coins / piece 		\n");
 	printf("7.Stat Pearl          9 stat pieces / pearl 	\n");	
+	printf("8.Job I               100 coins            0 pearls\n");	
+	printf("9.Job II              100 coins            0 pearls\n");	
 	printf("돈이 없으면 k를 누르세요 ...(돈을 지원해드립니다.)\n");
 	printf("-----------------------------------\n");
 	scanf("%s",input );
@@ -506,10 +551,10 @@ void playerOnEnchant () {
 	char inputCharacter = input[0];
 	int select = inputCharacter - '1';	
 	int inpetCharacter2;
-	int priceCoin[7] = { 50, 75, 50, 200, 50, 0, 0 };
-	int pricePearl[7] = { 20, 20, 5, 10, 0, 0, 0};
+	int priceCoin[9] = { 50, 75, 50, 200, 50, 0, 0, 100, 100};
+	int pricePearl[9] = { 20, 20, 5, 10, 0, 0, 0, 0, 0};
 
-	if ( select < 0 || select > 6 ) {
+	if ( select < 0 || select > 8 ) {
 		return;
 	}
 
@@ -634,6 +679,22 @@ void playerOnEnchant () {
 
 		printf("현재: 스탯 구슬 %d개\n", players[turn][0].statPearl );
 		printf("현재: 스탯 조각 %d개\n", players[turn][0].statPiece );
+	} else if (inputCharacter == '8') {
+		int x = rand() % 3;
+		int y = 2 * x + 1;
+		players[turn][turnTeam].job = y;
+		char names[3][100] = { "검사I", "저격수I", "도적I" };
+		printf("직업:%s\n", names[x]);
+	} else if (inputCharacter == '9') {
+		if (players[turn][turnTeam].job % 2 == 0)
+		{
+			printf("조건불충족\n");
+		}else{
+			players[turn][turnTeam].job++;
+			printf("당신은 2차전직에 성공하였습니다.\n");
+		}
+		
+
 	}
 
 }
@@ -954,6 +1015,27 @@ void getInput () {
 		if (map[qx][qy] == players[1-turn][i].name ) {
 			playerOnPlayer( i );
 			break;
+		}
+
+		if (players[turn][turnTeam].job == 3 || players[turn][turnTeam].job == 4) {
+			if (map[qx][qy-1] == players[1-turn][i].name ||
+				map[qx][qy+1] == players[1-turn][i].name ||
+				map[qx-1][qy] == players[1-turn][i].name ||
+				map[qx+1][qy] == players[1-turn][i].name )
+				{
+					playerOnPlayer( i );
+					break;
+				}
+		}
+		if (players[turn][turnTeam].job == 4) {
+			if (map[qx-1][qy-1] == players[1-turn][i].name ||
+				map[qx-1][qy+1] == players[1-turn][i].name ||
+				map[qx+1][qy-1] == players[1-turn][i].name ||
+				map[qx+1][qy+1] == players[1-turn][i].name )
+				{
+					playerOnPlayer( i );
+					break;
+				}
 		}
 	}
 
