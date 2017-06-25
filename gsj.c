@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <math.h>
+#include <math.h>1
 
 #define R 15
 #define C 43
