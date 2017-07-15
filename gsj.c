@@ -97,8 +97,13 @@ Castle hyunseo   = { 0, 0, 'h', "현서", 3, 0, 0 };
 Castle chanho    = { 0, 0, 'c', "찬호", 3, 0, 0 };
 Castle daewang   = { 0, 0, 'd', "대왕", 3, 0, 0 };
 Castle joongdong = { 0, 0, 'j', "중동", 3, 0, 0 };
+Castle irwon  = { 0, 0, 'i', "일원", 3, 0, 0};
+Castle sweden  = { 0, 0, 's', "스웨덴", 3, 0, 0};
+Castle uk   = { 0, 0, 'u', "영국", 3, 0, 0};
 
-Castle castles[5] = { wolhwa, hyunseo, chanho, daewang, joongdong };
+
+
+Castle castles[8] = { wolhwa, hyunseo, chanho, daewang, joongdong, irwon, sweden, uk };
 
 Tile portals[4] = {{ 0, C/3, 'P' }, { 0, C/3*2, 'P' }, { R-1, C/3, 'P' }, { R-1, C/3*2, 'P' }};
 Tile villages[5] = {{ 0, 0, 'V'}, { 0, 0, 'V'}, { 0, 0, 'V'}, { 0, 0, 'V'}, { 0, 0, 'V'}};
@@ -126,7 +131,7 @@ int py;
 int qx;
 int qy;
 
-int totalCastleCount = 5;
+int totalCastleCount = 8;
 
 int GAME = 1;
 
@@ -679,13 +684,17 @@ void playerOnEnchant () {
 
 		printf("현재: 스탯 구슬 %d개\n", players[turn][0].statPearl );
 		printf("현재: 스탯 조각 %d개\n", players[turn][0].statPiece );
+
 	} else if (inputCharacter == '8') {
+
 		int x = rand() % 3;
 		int y = 2 * x + 1;
 		players[turn][turnTeam].job = y;
 		char names[3][100] = { "검사I", "저격수I", "도적I" };
 		printf("직업:%s\n", names[x]);
+
 	} else if (inputCharacter == '9') {
+
 		if (players[turn][turnTeam].job % 2 == 0)
 		{
 			printf("조건불충족\n");
@@ -694,7 +703,6 @@ void playerOnEnchant () {
 			printf("당신은 2차전직에 성공하였습니다.\n");
 		}
 		
-
 	}
 
 }
@@ -719,7 +727,7 @@ void setup () {
 	castles[2].x = rand() % (R-2) + 1;
 	castles[2].y = rand() % (C/2 - 1) + 1 + C / 2;
 
-	for ( int i = 3; i < 5; ++i ) {
+	for ( int i = 3; i < 8; ++i ) {
 		int tmpx, tmpy;
 
 		do {
@@ -784,7 +792,7 @@ void draw () {
 		}
 	}
 
-	for ( int i = 0; i < 5; ++i ) {
+	for ( int i = 0; i < 8; ++i ) {
 		map[castles[i].x][castles[i].y] = castles[i].name;
 
 		if (castles[i].rotation == 2) {
@@ -990,7 +998,7 @@ void getInput () {
 		qy = py;
 		getInput();
 	}
-	for ( int i = 0; i < 5; ++i ) {
+	for ( int i = 0; i < 8; ++i ) {
 		if ( map[qx][qy] == castles[i].name ) {
 			playerOnCastle( i );
 		}
