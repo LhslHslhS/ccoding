@@ -16,7 +16,7 @@ unsigned long assetAfter, assetBefore, income;
 int j, k, l;
 
 long friendCoin[3] = { 1000000, 1000000, 1000000 };
-unsigned long borrowCoin[3] = { 0, 0, 0 };
+unsigned long borrowCoin[3] = { 0, 0, 0원 };
 unsigned long borrow = 0;
 int credit = 10;
 int percent[3] = {0 , 0 , 0};
