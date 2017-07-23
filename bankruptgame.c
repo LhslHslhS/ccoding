@@ -3,11 +3,11 @@
 #include <time.h>
 
 typedef struct {
-	int coin;
+	long long coin;
 	char name[20];
 	int object;
-	char count[100];
 	int factoryIndex;
+	int count[3];
 } Player;
 
 typedef struct {
@@ -26,7 +26,6 @@ typedef struct {
 
 int turn = 0;
 
-int count[3] = { 0, 0, 0 };
 int price[3] = { 1000, 2000, 5000 };
 char name[3][100] = { "사성주식", "LPG주식", "microhard" };
 int input;
@@ -36,8 +35,8 @@ int j, k, l;
 
 int percent[3] = {0 , 0 , 0};
 
-Player HyunseoPlayer = {30000 , "Hyunseo", 0, 0};
-Player ChanhoPlayer  = {30000, "Chanho ", 0, 0};
+Player HyunseoPlayer = {30000 , "Hyunseo", 0, 0, { 0, 0, 0 }};
+Player ChanhoPlayer  = {30000, "Chanho ", 0, 0, { 0, 0, 0 }};
 
 Player players[2] = { HyunseoPlayer, ChanhoPlayer };
 
@@ -62,18 +61,44 @@ void stockGame();
 void factoryGame();
 void marketGame();
 
+void stockChange() {
+	  price[0] += rand() % 5000 - 2500;
+	  price[1] += rand() % 8000 - 4000;
+	  price[2] += rand() % 12000 - 6000;
+	  for ( int i = 0; i < 3; ++i ) {
+	  	if (price[i] < 0 )
+	  	{
+	  		price[i] = price[i] * (-1);
+	  	}
+	  	if(price[i] < 750){
+	  		price[i] += 750;
+	  	}
+	  }
+
+}
+
 void changeturn(){
 	
 	printf("턴이 바뀝니다.\n");
 	for ( int x = 0; x < players[turn].factoryIndex; ++x ) {
 		  players[turn].coin += factories[turn][x].money;
 	}
-			
+	stockChange();
 	turn = 1 - turn;
+	if (players[turn].coin < 0 )
+	{
+		printf("%s님 이승리 하셨습니다.\n", players[1-turn].name);
+		return 0;
+	}
 	main();
 }
 
 void stockGame(){
+	printf("자본:%lld원\n", players[turn].coin);
+	printf("------------------------------------\n");
+	printf("1.사성주식: %d 		%d개\n" , price[0], players[turn].count[0]);
+	printf("2.LPG주식: %d 		%d개\n",price[1], players[turn].count[1]);
+	printf("3.microhard주식: %d 		%d개\n",price[2], players[turn].count[2]);
 	printf("-----------------------------------\n");
 	printf("1.주식 매입\n");
 	printf("2.주식 판매\n");
@@ -84,23 +109,19 @@ void stockGame(){
 
 	switch (input) {
 		case 1:
-			printf("자본:%d원\n", players[turn].coin);
-			printf("------------------------------------\n");
-			printf("1.사성주식: 1000 		%d개\n",count[0]);
-			printf("2.LPG주식: 2000 		%d개\n",count[1]);
-			printf("3.microhard주식: 5000 		%d개\n",count[2]);
+
 			printf("매입 주식을 설정 하여주세용. 개수 설정\n");
 			scanf("%d %d", &j, &k );
 
 			if ( k * price[j-1] > players[turn].coin) {
 				printf("프로그램: 주식 한개를 파십시오.\n      안 그러면 쫓겨납니다...\n");
-				squareGame();
+				break;
 			}
 
-			count[j-1] += k;
+			players[turn].count[j-1] += k;
 			players[turn].coin -= k * price[j-1];
 			printf("완료되었습니다.\n");
-
+			
 
 			break;
 
@@ -109,17 +130,17 @@ void stockGame(){
 			scanf("%d %d", &j, &k );
 
 
-			if ( k > count[j-1])
+			if ( k > players[turn].count[j-1])
 			{
 				printf("프로그램: 사기 치지마 \n      경찰에 신고한다\n");
-				squareGame();
+				break;
 			}
 
-			count[j-1] -= k;
+			players[turn].count[j-1] -= k;
 			players[turn].coin += k * price[j-1];
 			
 
-			stockGame();
+			
 			break;
 		}
 }
@@ -197,7 +218,7 @@ void squareGame() {
 	char inputSquare[10];
 
 	
-	printf("돈: %d\n", players[turn].coin);
+	printf("돈: %lld\n", players[turn].coin);
 	printf("            |------------|           \n");
 	printf("            |            |           \n");
 	printf("            |   stock    |           \n");
@@ -240,7 +261,7 @@ void casinoGame() {
 	printf("카지노시작!\n");
 	int casinoplayer = rand() % 2;
 	int sign = rand() % 2;
-	int money = rand() % 500000;
+	int money = rand() % 100000;
 	if (casinoplayer == turn)
 	{
 		printf("나\n");
@@ -294,7 +315,7 @@ void tradingGame() {
 	scanf("%d",&inputSelect );
 	if (inputSelect == 1){
 
-		printf("현재 재산: %d원\n",players[turn].coin );
+		printf("현재 재산: %lld원\n",players[turn].coin );
 		printf("현재 물건개수: %d개\n",players[turn].object);
 		printf("나라1: %2s국 최대수출개수: %3d개 성공확률: %d%% 이익: %3d%%\n", country1.name, country1.maximum, country1.successPercent, country1.percent);
 		printf("나라2: %2s국 최대수출개수: %3d개 성공확률: %d%% 이익: %3d%%\n", country2.name, country2.maximum, country2.successPercent, country2.percent);
@@ -313,6 +334,7 @@ void tradingGame() {
 			tradingGame();
 			return;
 		}
+		players[turn].object -= inputObjectCount;
 
 		if (inputCountrySelect == 1){
 			if (rand() % 5 == 0)
@@ -334,6 +356,12 @@ void tradingGame() {
 			{
 				success = 1;
 			}
+		}
+		if (success == 1)
+		{
+			printf("무역의 성공으로\n" );
+		}else{
+			printf("무역의 실패로\n");
 		}
 		players[turn].coin += success * countries[inputCountrySelect - 1].successPercent * inputObjectCount * 1000;
 		printf("결제가 끝났습니다.\n");
@@ -358,7 +386,7 @@ int main () {
 	char inputStart[10];
 
 	srand(time(NULL));
-	printf("돈: %d\n", players[turn].coin);
+	printf("돈: %lld\n", players[turn].coin);
 	printf("            |------------|           \n");
 	printf("            |            |           \n");
 	printf("            |   square   |           \n");
@@ -384,12 +412,12 @@ int main () {
 		casinoGame();
 	}else if (inputStart[0] == 's')
 	{
-		raffleGame();
+	 	raffleGame();
 	}else if (inputStart[0] == 'd')
 	{
-		tradingGame();
+	 	tradingGame();
 	}else{
-		main();
+	 	main();
 	}
 
 	changeturn();
