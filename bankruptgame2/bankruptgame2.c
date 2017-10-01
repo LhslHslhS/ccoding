@@ -58,21 +58,71 @@ typedef struct {
 Player hyunseoPlayer = { 18, 40, 'H', 1000, 0, 0, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0 } };
 Player chanhoPlayer = { 18, 41, 'C', 1000, 0, 0, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0 } };
 
-Land land1 = { 1, 7, "land1", 0, 3 };
-Land land2 = { 1, 5, "land2", 0, 3 };
-Land land3 = { 3, 5, "land3", 0, 3 };
-Land land4 = { 3, 3, "land4", 0, 3 };
-Land land5 = { 1, 3, "land5", 0, 3 };
-
-Factory factory1 = { 8, 7, "factory1", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 3 };
-Factory factory2 = { 12, 7, "factory2", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 3 };
-Factory factory3 = { 8, 11, "factory3", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 3 };
-Factory factory4 = { 12, 11, "factory4", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 3 };
-
-ElectricFactory electricFactory1 = { 4, 7, "electricFactory1", 0, 0, 3 };
-ElectricFactory electricFactory2 = { 4, 11, "electricFactory2", 0, 0, 3 };
-
 Player players[2] = { hyunseoPlayer, chanhoPlayer };
+
+Land land1 = { 7, 1, "land1", 0, 3 };
+Land land2 = { 5, 1, "land2", 0, 3 };
+Land land3 = { 5, 3, "land3", 0, 3 };
+Land land4 = { 3, 3, "land4", 0, 3 };
+Land land5 = { 3, 1, "land5", 0, 3 };
+
+Land lands[5] = { land1, land2, land3, land4, land5 };
+
+Factory factory1 = { 7, 8, "factory1", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 3 };
+Factory factory2 = { 7, 12, "factory2", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 3 };
+Factory factory3 = { 11, 8,  "factory3", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 3 };
+Factory factory4 = { 11, 12, "factory4", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 3 };
+
+Factory factories[4] = { factory1, factory2, factory3, factory4 };
+
+ElectricFactory electricFactory1 = { 7, 4, "electricFactory1", 0, 0, 3 };
+ElectricFactory electricFactory2 = { 11, 4, "electricFactory2", 0, 0, 3 };
+
+ElectricFactory electricFactories[2] = { electricFactory1, electricFactory2 };
+
+void playerInLand(int index);
+void playerInRealEstate();
+void playerInElectricFactory(int index);
+void playerInFactory(int index);
+void playerInWild();
+void playerInCityHall();
+void playerInJob();
+void playerInJewelry();
+void playerInCasino();
+void playerInMarket();
+
+
+void playerInLand(int index){
+	printf("%d hello Land \n", index);
+}
+void playerInElectricFactory(int index){
+	printf("%d hello electricFactory\n", index);
+}
+void playerInFactory(int index){
+	printf("%d hello Factory\n", index);
+}
+void playerInRealEstate(){
+	printf("hello RealEstate\n");
+}
+void playerInWild(){
+	printf("hello Wild\n");
+}
+void playerInCityHall(){
+	printf("hello CityHall\n");
+}
+void playerInJob(){
+	printf("hello Job\n");
+}
+void playerInJewelry(){
+	printf("hello Jewelry\n");
+}
+void playerInCasino(){
+	printf("hello Casino\n");
+}
+void playerInMarket(){
+	printf("hello Market\n");
+}
+	
 
 void setupMap () {
 
@@ -129,6 +179,7 @@ void draw () {
 
 	for ( int i = 0; i < 2; ++i ) {
 		map[players[i].x][players[i].y] = players[i].name;
+		printf("%d %d\n", players[i].x, players[i].y);
 	}
 
 	for ( int j = 0; j < W+2; ++j ) {
@@ -180,9 +231,28 @@ void getInput () {
 	}
 
 	if ( map[qx][qy] == '|' ) {
-		printf("Hit wall`\n");
 		getInput();
 	}
+
+
+	for ( int i = 0; i < 5; ++i ) {
+		if ( (qx/2 == lands[i].x) && (qy/4 == lands[i].y) ) {
+			playerInLand( i );
+		}
+	}
+
+		for ( int i = 0; i < 4; ++i ) {
+		if ( (qx/2 == factories[i].x) && (qy/4 == factories[i].y) ) {
+			playerInFactory( i );
+		}
+	}
+
+		for ( int i = 0; i < 2; ++i ) {
+		if ( (qx/2 == electricFactories[i].x) && (qy/4 == electricFactories[i].y) ) {
+			playerInElectricFactory( i );
+		}
+	}
+
 
 	players[turn].x = qx;
 	players[turn].y = qy;
