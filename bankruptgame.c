@@ -3,11 +3,12 @@
 #include <time.h>
 
 typedef struct {
-	long long coin;
+	long long coin; 
 	char name[20];
 	int object;
 	int factoryIndex;
 	int count[3];
+	int count2[3];
 } Player;
 
 typedef struct {
@@ -27,7 +28,9 @@ typedef struct {
 int turn = 0;
 
 int price[3] = { 1000, 2000, 5000 };
+int price2[3] = { 2000, 4000, 10000 };
 char name[3][100] = { "사성주식", "LPG주식", "microhard" };
+char name2[3][100] = { "루비", "사파이어", "다이아몬드"};
 int input;
 int warning = 0;
 
@@ -35,8 +38,8 @@ int j, k, l;
 
 int percent[3] = {0 , 0 , 0};
 
-Player HyunseoPlayer = {30000 , "Hyunseo", 0, 0, { 0, 0, 0 }};
-Player ChanhoPlayer  = {30000, "Chanho ", 0, 0, { 0, 0, 0 }};
+Player HyunseoPlayer = {30000 , "Hyunseo", 0, 0, { 0, 0, 0 }, { 0, 0, 0 }};
+Player ChanhoPlayer  = {30000, "Chanho ", 0, 0, { 0, 0, 0 }, { 0, 0, 0 }};
 
 Player players[2] = { HyunseoPlayer, ChanhoPlayer };
 
@@ -60,24 +63,34 @@ void changeturn();
 void stockGame();
 void factoryGame();
 void marketGame();
+void bosuckGame();
 
 void stockChange() {
-	  price[0] += rand() % 5000 - 2500;
-	  price[1] += rand() % 8000 - 4000;
-	  price[2] += rand() % 12000 - 6000;
-	  for ( int i = 0; i < 3; ++i ) {
-	  	if (price[i] < 0 )
-	  	{
-	  		price[i] = price[i] * (-1);
-	  	}
-	  	if(price[i] < 750){
-	  		price[i] += 750;
-	  	}
-	  }
-
+	price[0] += rand() % 5000 - 2500;
+	price[1] += rand() % 8000 - 4000;
+	price[2] += rand() % 12000 - 6000;
+	price2[0] += rand() % 10000 - 5000;
+	price2[1] += rand() % 16000 - 8000;
+	price2[2] += rand() % 32000 - 16000;
+	for ( int i = 0; i < 3; ++i ) {
+		if (price[i] < 0 ) {
+			price[i] = price[i] * (-1);
+		}
+		if (price[i] < 750) {
+			price[i] += 750;
+		}
+	}	
+	for ( int z = 0; z < 3; ++z ) {
+		if (price2[z] < 0 ) {
+			price2[z] = price2[z] * (-1);
+		}
+		if(price2[z] < 750) {
+			price2[z] += 750;
+		}
+	}
 }
 
-void changeturn(){
+void changeturn() {
 	
 	printf("턴이 바뀝니다.\n");
 	for ( int x = 0; x < players[turn].factoryIndex; ++x ) {
@@ -85,15 +98,14 @@ void changeturn(){
 	}
 	stockChange();
 	turn = 1 - turn;
-	if (players[turn].coin < 0 )
-	{
+	if (players[turn].coin < 0 ) {
 		printf("%s님 이승리 하셨습니다.\n", players[1-turn].name);
-		return 0;
+		return;
 	}
 	main();
 }
 
-void stockGame(){
+void stockGame() {
 	printf("자본:%lld원\n", players[turn].coin);
 	printf("------------------------------------\n");
 	printf("1.사성주식: %d 		%d개\n" , price[0], players[turn].count[0]);
@@ -213,27 +225,79 @@ void marketGame() {
 		printf("업그레이드 되었습니다\n");
 	}
 }
+void bosuckGame() {
+	int j, k, L;
+	int input2;
+	printf("자본:%lld원\n", players[turn].coin);
+	printf("------------------------------------\n");
+	printf("1.루비: %d 		%d개\n" , price2[0], players[turn].count2[0]);
+	printf("2.사파이어: %d 		%d개\n",price2[1], players[turn].count2[1]);
+	printf("3.다이아몬드: %d 		%d개\n",price2[2], players[turn].count2[2]);
+	printf("-----------------------------------\n");
+	printf("1.주식 매입\n");
+	printf("2.주식 판매\n");
+	printf("-----------------------------------\n");
+
+	scanf("%d", &input2 );
+
+
+	switch (input2) {
+		case 1:
+
+			printf("매입 보석을 설정 하여주세용. 개수 설정\n");
+			scanf("%d %d", &j, &k );
+
+			if ( k * price2[j-1] > players[turn].coin) {
+				printf("서버: 보석 한개를 파십시오.\n      안 그러면 쫓겨납니다...\n");
+				break;
+			}
+
+			players[turn].count2[j-1] += k;
+			players[turn].coin -= k * price2[j-1];
+			printf("완료되었습니다.\n");
+			
+
+			break;
+
+		case 2:
+			printf("판매 주식을 설정 하여주세용. 개수 설정\n");
+			scanf("%d %d", &j, &k );
+
+
+			if ( k > players[turn].count2[j-1])
+			{
+				printf("프로그램: 사기 치지마 \n      경찰에 신고한다\n");
+				break;
+			}
+
+			players[turn].count2[j-1] -= k;
+			players[turn].coin += k * price2[j-1];
+			
+
+			
+			break;
+		}
+}
 
 void squareGame() {
 	char inputSquare[10];
 
 	
 	printf("돈: %lld\n", players[turn].coin);
-	printf("            |------------|           \n");
-	printf("            |            |           \n");
-	printf("            |   stock    |           \n");
-	printf("            |     w      |           \n");
-	printf("------------|            |------------\n");
-	printf("|                        |||||||||||||\n");
-	printf("|                        |||||||||||||\n");
-	printf("|  Factory      choose   |||nothing|||\n");
-	printf("|     a        %s   ||||||d||||||\n",players[turn].name);
-	printf("|                        |||||||||||||\n");
-	printf("------------|            |------------\n");
-	printf("            |            |           \n");
-	printf("            |   market   |           \n");
-	printf("            |      s     |           \n");
-	printf("            |------------|           \n");
+	printf("            |------------|            \n");
+	printf("            |            |            \n");
+	printf("            |   stock    |            \n");
+	printf("            |     w      |            \n");
+	printf("------------|            |------------|\n");
+	printf("|                                     |\n");
+	printf("|  Factory      choose       bosuck   |\n");
+	printf("|     a        %s         d      |\n",players[turn].name);
+	printf("|                                     |\n");
+	printf("------------|            |------------|\n");
+	printf("            |            |            \n");
+	printf("            |   market   |            \n");
+	printf("            |      s     |            \n");
+	printf("            |------------|            \n");
 
 	
 	scanf("%s", inputSquare);
@@ -249,8 +313,7 @@ void squareGame() {
 		marketGame();
 	}else if (inputSquare[0] == 'd')
 	{
-		printf("아\n무\n것\n도\n없\n음\n");
-		squareGame();
+		bosuckGame();
 	}else{
 		squareGame();
 	}
@@ -292,7 +355,7 @@ void raffleGame() {
 	int rafflecoin;
 	printf("가격를 적어주십시오.\n");
 	scanf("%d",&rafflecoin);
-	if (10 * rafflecoin > players[turn].coin)
+	if (10 * rafflecoin > players[turn].coin || rafflecoin < 0 )
 	{
 		printf("돈 부족 \n");
 		raffleGame();
