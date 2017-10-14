@@ -19,7 +19,7 @@ int cursor = 0;
 int turn = 0;
 int tax = 0;
 
-int maxTurn = 500;
+int maxTurn = 1000;
 
 typedef struct {
 	int x;
@@ -66,8 +66,8 @@ typedef struct {
 	int owner;
 } ElectricFactory;
 
-Player hyunseoPlayer = { 18, 40, 'H', 300000, 0, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, } };
-Player chanhoPlayer = { 18, 41, 'C', 300500, 0, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, } };
+Player hyunseoPlayer = { 18, 40, 'H', 30000, 0, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, } };
+Player chanhoPlayer = { 18, 41, 'C', 30000, 0, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, } };
 
 Player players[2] = { hyunseoPlayer, chanhoPlayer };
 
@@ -90,6 +90,8 @@ ElectricFactory electricFactory1 = { 7, 4, "electricFactory1", 0, 0, 3 };
 ElectricFactory electricFactory2 = { 11, 4, "electricFactory2", 0, 0, 3 };
 
 ElectricFactory electricFactories[2] = { electricFactory1, electricFactory2 };
+
+long long unsigned int prices[10] = {5000, 10000, 30000, 50000, 100000, 300000, 500000, 1000000, 3000000, 5000000};
 
 void process();
 void getInput();
@@ -169,7 +171,8 @@ void playerInFactory(int index){
 	printf("%d hello Factory\n", index);
 }
 void playerInRealEstate(){
-	printf("hello RealEstate\n");
+	printf("무슨 땅을 사시겠습니까?\n");
+
 }
 void playerInWild(){
 	printf("hello Wild\n");
@@ -194,18 +197,18 @@ void playerInJob(){
 
 void playerInJewelry(){
 	
-	int prices[10] = {5000, 10000, 30000, 50000, 100000, 300000, 500000, 1000000, 3000000, 5000000};
+	
 	printf("-----------------------------------\n" );
-	printf("a.기념주화 가격: %d\n",  prices[0] );
-	printf("b.은 귀걸이 가격: %d\n",  prices[1] );
-	printf("c.금 팔찌 가격: %d\n",  prices[2] );
-	printf("d.다이아몬드 반지 가격: %d\n", prices[3] );
-	printf("e.에메랄드 목걸이 가격: %d\n", prices[4] );
-	printf("f.사파이어 머리핀 가격: %d\n", prices[5] );
-	printf("g.토파즈 브로치 가격: %d\n", prices[6] );
-	printf("h.루비 티아라 가격: %d\n", prices[7] );
-	printf("i.타파이트 트로피 가격: %d\n",  prices[8] );
-	printf("j.화려한 구슬 가격: %d\n\n",  prices[9] );
+	printf("0.기념주화 가격: %llu\n",  prices[0] );
+	printf("1.은 귀걸이 가격: %llu\n",  prices[1] );
+	printf("2.금 팔찌 가격: %llu\n",  prices[2] );
+	printf("3.다이아몬드 반지 가격: %llu\n", prices[3] );
+	printf("4.에메랄드 목걸이 가격: %llu\n", prices[4] );
+	printf("5.사파이어 머리핀 가격: %llu\n", prices[5] );
+	printf("6.토파즈 브로치 가격: %llu\n", prices[6] );
+	printf("7.루비 티아라 가격: %llu\n", prices[7] );
+	printf("8.타파이트 트로피 가격: %llu\n",  prices[8] );
+	printf("9.화려한 구슬 가격: %llu\n\n",  prices[9] );
 	printf("-----------------------------------\n" );
 	printf("무엇을 하시겠습니까?\n");
 	printf("1. 사기\n");
@@ -221,13 +224,13 @@ void playerInJewelry(){
 		scanf("%d", &x);
 		printf("몇개 사시겠습니까?\n");
 		scanf("%d", &y);
-		if (players[turn].coin < prices[x - 1] * y)
+		if (players[turn].coin < prices[x] * y)
 		{
 			printf("돈이 없어서 쫓겨났습니다.\n");
 			playerInJewelry();
 		}else{
-			players[turn].coin -= prices[x - 1] * y;
-			players[turn].Jewelry[x-1] += y;
+			players[turn].coin -= prices[x] * y;
+			players[turn].Jewelry[x] += y;
 			printf("성공적 구매하였습니다.\n");
 			getInput();
 		}
@@ -239,13 +242,13 @@ void playerInJewelry(){
 		scanf("%d", &u );
 		printf("얼만큼 파시겠습니까?\n");
 		scanf("%d", &i);
-		if (players[turn].Jewelry[u-1] < i)
+		if (players[turn].Jewelry[u] < i)
 		{
 			printf("보석이 부족합니다.\n");
 			playerInJewelry();
-		}else if (players[turn].Jewelry[u-1] >= i)
+		}else if (players[turn].Jewelry[u] >= i)
 		{
-			players[turn].coin += prices[u-1] * i;
+			players[turn].coin += prices[u] * i;
 			printf("성공적으로 판매하였습니다.\n");
 			getInput();
 		}
@@ -254,20 +257,53 @@ void playerInJewelry(){
 }
 void playerInCasino(){
 	int x;
-	int sign;
+	int whoplayer = 0;
+	int mc = 0;
+	int sign = 1;
 	printf("1. 나를 위한 도박\n");
 	printf("2. 너만을 위한 도박\n");
 	printf("3. 우리를 위한 도박\n");
 	scanf("%d", &x);
+	int casino[3] = { 5000, 300000, 100000 };
+	if (players[turn].coin < casino[x - 1])
+	{
+		printf("돈을 준비해 오십시오...\n");
+		getInput();
+	}
+		switch(x){
+			case 1:
+				players[turn].coin -= 50000;
+				mc = rand() % 100000;
+				whoplayer = turn;
+				players[turn].coin += mc;
+				break;
+			case 2:
+				players[turn].coin -= 200000;
+				mc = rand() % 700000 - 300000;
+				whoplayer = 1 - turn;
+				players[1 - turn].coin += mc;
+				break;
+			case 3:
+				players[turn].coin -= 100000;
+				mc = rand() % 200000;
+				whoplayer = rand() % 2;
+				sign = ((float) (rand() % 2 - 0.5)) * 2;
+				players[whoplayer].coin += sign * mc;
+				break;
+			default:
+				break;
+		}
+
+		printf("%c의 돈이 %d만큼 추가되었습니다.\n",players[whoplayer].name , mc);
 
 }
 void playerInMarket(){
-	printf("hello Market\n");
+	//players[turn].coin += players[turn].plant[1] * 
 }
 	
 
 void setupMap () {
-	printf("세금 납부까지: %d\n",500 - tax);
+	printf("세금 납부까지: %d\n",1000 - tax);
 	printf("플레이어1 %d원\n", players[0].coin);
 	printf("플레이어2 %d원\n", players[1].coin);
 	memcpy( &map[0],  "||||||||||||||||||||||||||||||||||||||||||||||||||||||||", strlen("                                                        "));
@@ -277,7 +313,7 @@ void setupMap () {
 	memcpy( &map[4],  "||||||||||||||||||||||||||||||||                    ||||", strlen("                                                        "));
 	memcpy( &map[5],  "||||||||||||||||||||||||||||||||                    ||||", strlen("                                                        "));
 	memcpy( &map[6],  "||||LLLL    LLLL||||||||||||||||JJJJ            MMMM||||", strlen("                                                        "));
-	memcpy( &map[7],  "||||5555    4444||||||||||||||||BBBB            MMMM||||", strlen("                                                        "));
+	memcpy( &map[7],  "||||5555    4444||||||||||||||||BBBB            kkkk||||", strlen("                                                        "));
 	memcpy( &map[8],  "||||            ||||||||||||||||                    ||||", strlen("                                                        "));
 	memcpy( &map[9],  "||||            ||||||||||||||||                    ||||", strlen("                                                        "));
 	memcpy( &map[10], "||||LLLL    LLLL||||||||||||||||        CCCC        ||||", strlen("                                                        "));
@@ -393,6 +429,11 @@ void getInput () {
 		playerInJewelry();
 	}
 
+		if ( (qx/2 == 5) && (qy/4 == 10) )
+	{
+		playerInCasino();
+	}
+
 
 	players[turn].x = qx;
 	players[turn].y = qy;
@@ -416,6 +457,12 @@ void process () {
 	{
 		printf("세금을 납부하기 위해 시청으로 이동시키겠습니다.\n");
 		playerInCityHall();
+	}
+
+	for ( int i = 0; i < 10; ++i ) {
+		int percent = rand() % 150 + 40; 
+		prices[i] = (prices[i] * percent) / 100;
+		printf("%d %d %llu\n", i, percent, prices[i]);
 	}
 
 	
