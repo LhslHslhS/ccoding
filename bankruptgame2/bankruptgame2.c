@@ -71,23 +71,23 @@ Player chanhoPlayer = { 18, 41, 'C', 30000, 0, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 },
 
 Player players[2] = { hyunseoPlayer, chanhoPlayer };
 
-Land land1 = { 7, 1, "land1", 0, 10, 0, 0 };
-Land land2 = { 5, 1, "land2", 0, 10, 1, 0 };
-Land land3 = { 5, 3, "land3", 0, 10, 3, 0 };
-Land land4 = { 3, 3, "land4", 0, 10, 3, 0 };
-Land land5 = { 3, 1, "land5", 0, 10, 3, 0 };
+Land land1 = { 7, 1, "land1", 0, 10, 2, 0 };
+Land land2 = { 5, 1, "land2", 0, 10, 2, 0 };
+Land land3 = { 5, 3, "land3", 0, 10, 2, 0 };
+Land land4 = { 3, 3, "land4", 0, 10, 2, 0 };
+Land land5 = { 3, 1, "land5", 0, 10, 2, 0 };
 
 Land lands[5] = { land1, land2, land3, land4, land5 };
 
-Factory factory1 = { 7, 8, "factory1", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 3 };
-Factory factory2 = { 7, 12, "factory2", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 3 };
-Factory factory3 = { 11, 8,  "factory3", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 3 };
-Factory factory4 = { 11, 12, "factory4", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 3 };
+Factory factory1 = { 7, 8, "factory1", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 2 };
+Factory factory2 = { 7, 12, "factory2", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 2 };
+Factory factory3 = { 11, 8,  "factory3", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 2 };
+Factory factory4 = { 11, 12, "factory4", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 2 };
 
 Factory factories[4] = { factory1, factory2, factory3, factory4 };
 
-ElectricFactory electricFactory1 = { 7, 4, "electricFactory1", 0, 0, 3 };
-ElectricFactory electricFactory2 = { 11, 4, "electricFactory2", 0, 0, 3 };
+ElectricFactory electricFactory1 = { 7, 4, "electricFactory1", 0, 0, 2 };
+ElectricFactory electricFactory2 = { 11, 4, "electricFactory2", 0, 0, 2 };
 
 ElectricFactory electricFactories[2] = { electricFactory1, electricFactory2 };
 
@@ -172,6 +172,99 @@ void playerInFactory(int index){
 }
 void playerInRealEstate(){
 	printf("무슨 땅을 사시겠습니까?\n");
+	for ( int i = 0; i < 5; ++i ) {
+		if (lands[i].owner == 0)
+		{
+			printf("%d번 땅 (주인: hyunseo)\n",i + 1 );
+		}else if (lands[i].owner == 1)
+		{
+			printf("%d번 땅 (주인: chanho)\n",i + 1 );
+		}else if (lands[i].owner == 2)
+		{
+			printf("%d번 땅 (주인: 없음)\n",i + 1 );
+		}
+	}
+	for ( int i = 0; i < 2; ++i ) {
+		if (electricFactories[i].owner == 0)
+		{
+			printf("%d번 전기공장 (주인: hyunseo)\n",i + 1 );
+		}else if (electricFactories[i].owner == 1)
+		{
+			printf("%d번 전기공장 (주인: chanho)\n",i + 1 );
+		}else if (electricFactories[i].owner == 2)
+		{
+			printf("%d번 전기공장 (주인: 없음)\n",i + 1 );
+		}
+	}
+	for ( int i = 0; i < 4; ++i ) {
+		if (factories[i].owner == 0)
+		{
+			printf("%d번 공장 (주인: hyunseo)\n",i + 1 );
+		}else if (factories[i].owner == 1)
+		{
+			printf("%d번 공장 (주인: chanho)\n",i + 1 );
+		}else if (factories[i].owner == 2)
+		{
+			printf("%d번 공장 (주인: 없음)\n",i + 1 );
+		}
+	}
+	int i = 0;
+	int o = 0; 
+	printf("무엇을 사시겠습니까?\n");
+	printf("1. 땅 (300000만원)\n");
+	printf("2. 공장 (2000000원)\n");
+	printf("3. 전기공장 (30000000원)\n");
+	scanf("%d", &i);
+	printf("어떤 것을 사시겠습니까?\n");
+	scanf("%d", &o);
+
+	
+	if (i == 1)
+	{
+		if (players[turn].coin < 300000)
+		{
+			printf("돈이 부족합니다.\n");
+			getInput();
+		}
+		if (lands[o].owner == (1 - turn) || (lands[o].owner == turn))
+		{
+			printf("주인이 있습니다.\n" );
+		}
+		players[turn].coin -= 300000;
+		lands[o].owner = turn;
+		printf("결제완료 되었습니다.\n");
+	}
+	else if (i == 2)
+	{
+		if (players[turn].coin < 2000000)
+		{
+			printf("돈이 부족합니다.\n");
+			getInput();
+		}
+		if (factories[o].owner == (1 - turn) || (factories[o].owner == turn))
+		{
+			printf("주인이 있습니다.\n" );
+		}
+		players[turn].coin -= 2000000;
+		factories[o].owner = turn;
+		printf("결제완료 되었습니다.\n");
+	}
+	else if (i == 3)
+	{
+		if (players[turn].coin < 30000000)
+		{
+			printf("돈이 부족합니다.\n");
+			getInput();
+		}
+		if (electricFactories[o].owner == (1 - turn) || (electricFactories[o].owner == turn))
+		{
+			printf("주인이 있습니다.\n" );
+		}
+		players[turn].coin -= 30000000;
+		electricFactories[o].owner = turn;
+		printf("결제완료 되었습니다.\n");
+	}
+
 
 }
 void playerInWild(){
@@ -192,7 +285,7 @@ void playerInCityHall(){
 	
 }
 void playerInJob(){
-	printf("hello Job\n");
+	printf("전기공\n");
 }
 
 void playerInJewelry(){
@@ -433,6 +526,10 @@ void getInput () {
 	{
 		playerInCasino();
 	}
+		if ( (qx/2 == 11) && (qy/4 == 1))
+		{
+			playerInRealEstate();
+		}
 
 
 	players[turn].x = qx;
@@ -459,13 +556,6 @@ void process () {
 		playerInCityHall();
 	}
 
-	for ( int i = 0; i < 10; ++i ) {
-		int percent = rand() % 150 + 40; 
-		prices[i] = (prices[i] * percent) / 100;
-		printf("%d %d %llu\n", i, percent, prices[i]);
-	}
-
-	
 }
 
 int main () {
