@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
-
 #define W 56
 #define H 26
 #define MH 7
@@ -48,13 +46,10 @@ typedef struct {
 	int x;
 	int y;
 	char name[100];
-	int plant1;
-	int plant2;
-	int plant3;
-	int plant4;
-	int plant5;
-	char animals[4];
+	int plant;
+	int grow;
 	int owner;
+	int growfast;
 } Factory;
 
 typedef struct {
@@ -71,18 +66,18 @@ Player chanhoPlayer = { 18, 41, 'C', 30000, 0, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 },
 
 Player players[2] = { hyunseoPlayer, chanhoPlayer };
 
-Land land1 = { 7, 1, "land1", 0, 10, 2, 0 };
-Land land2 = { 5, 1, "land2", 0, 10, 2, 0 };
-Land land3 = { 5, 3, "land3", 0, 10, 2, 0 };
-Land land4 = { 3, 3, "land4", 0, 10, 2, 0 };
-Land land5 = { 3, 1, "land5", 0, 10, 2, 0 };
+Land land1 = { 7, 1, "land1", 0, 10, 2, 1 };
+Land land2 = { 5, 1, "land2", 0, 10, 2, 1 };
+Land land3 = { 5, 3, "land3", 0, 10, 2, 1 };
+Land land4 = { 3, 3, "land4", 0, 10, 2, 1 };
+Land land5 = { 3, 1, "land5", 0, 10, 2, 1 };
 
 Land lands[5] = { land1, land2, land3, land4, land5 };
 
-Factory factory1 = { 7, 8, "factory1", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 2 };
-Factory factory2 = { 7, 12, "factory2", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 2 };
-Factory factory3 = { 11, 8,  "factory3", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 2 };
-Factory factory4 = { 11, 12, "factory4", 0, 0, 0, 0, 0, { 0, 0, 0, 0 }, 2 };
+Factory factory1 = { 7, 8, "factory1", 0, 10, 2, 2 };
+Factory factory2 = { 7, 12, "factory2", 0, 10, 2, 2 };
+Factory factory3 = { 11, 8,  "factory3", 0, 10, 2, 2 };
+Factory factory4 = { 11, 12, "factory4", 0, 10, 2, 2 };
 
 Factory factories[4] = { factory1, factory2, factory3, factory4 };
 
@@ -109,7 +104,7 @@ void playerInMarket();
 
 
 void playerInLand(int index){
-	if (lands[index].owner == 1 - turn)
+	if (lands[index].owner == 1 - turn || lands[index].owner == 2)
 	{
 		printf("남의 땅입니다.\n");
 	}else{
@@ -165,10 +160,79 @@ void playerInLand(int index){
 	}
 }
 void playerInElectricFactory(int index){
-	printf("%d hello electricFactory\n", index);
+	//if (electricFactories[index].owner == 1 - turn || electricFactories[index].owner == 2)
+	//{
+	//	printf("남의 전기공장입니다.\n");
+	//}else{
+	//	int a;
+	//	printf("무엇을 하시겠습니까?\n");
+	//	printf("1. 반도체 판매\n");
+	//	printf("2. 공장 돌리기 돌X4, 레드스톤X6, 금X1, 청금석X4, 철X2, 나무X4\n");
+	//	printf("3. 보석 판매\n");
+	//	printf("4. 기계 구매\n");
+	//	scanf("%d", a);
+	//	
+	//	if (a == 1)
+	//	{
+	//		/* code */
+	//	}
+	//}
 }
 void playerInFactory(int index){
-	printf("%d hello Factory\n", index);
+	if (factories[index].owner == 1 - turn || factories[index].owner == 2)
+	{
+		printf("남의 공장입니다.\n");
+	}else{
+		int a;
+		printf("1. 수확하기\n");
+		printf("2. 심기\n");
+		printf("3. 생성 가속하기 cost: 5000000\n");
+		scanf("%d", &a);
+		if (a == 1)
+		{
+			if (factories[index].grow == 10)
+			{
+				if (factories[index].plant == 0)
+				{
+					players[turn].plant[0] += 500;
+					printf("성공적으로 수확하였습니다.\n");
+					process();
+				}else if (factories[index].plant == 1)
+				{
+					players[turn].plant[1] += 500;
+					printf("성공적으로 수확하였습니다.\n");
+					process();
+				}
+			}else if (factories[index].grow < 10)
+			{
+				printf("식물이 덜 자랐습니다.\n");
+				playerInLand(index);
+			}
+		}else if (a == 2) {
+			printf("1. 씨앗\n");
+			printf("2. 감자\n");
+			int b;
+			scanf("%d", &b);
+			if (players[turn].plant[b] < 5) {
+				printf("심을 씨앗이 없습니다\n");
+				playerInLand(index);
+			} else if (players[turn].plant[b] >= 5) {
+				factories[index].plant = b;
+				printf("모두 심었습니다.\n");
+				process();
+			}
+		}else if (a == 3)
+		{
+			if (players[turn].coin <	5000000)
+				{
+					printf("약을 살 돈이 없습니다.\n");
+				}else{
+					players[turn].coin -= 5000000;
+					factories[index].growfast++;
+					printf("약을 성공적으로 샀습니다.\n");
+				}
+		}
+	}
 }
 void playerInRealEstate(){
 	printf("무슨 땅을 사시겠습니까?\n");
