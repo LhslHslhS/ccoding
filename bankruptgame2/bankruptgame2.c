@@ -24,12 +24,12 @@ typedef struct {
 	int y;
 	char name;
 	int coin;
-	int job;
 	int tax;
 	char plant[2];
 	char minerals[6];
 	char meats[3];
 	char Jewelry[10];
+	int semiConductorSet;
 } Player;
 
 typedef struct {
@@ -57,12 +57,14 @@ typedef struct {
 	int y;
 	char name[100];
 	int semiConductor;
+	int semiConductorTime;
 	int machines;
 	int owner;
+	int semiConductorMachine;
 } ElectricFactory;
 
-Player hyunseoPlayer = { 18, 40, 'H', 30000, 0, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, } };
-Player chanhoPlayer = { 18, 41, 'C', 30000, 0, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, } };
+Player hyunseoPlayer = { 18, 40, 'H', 30000, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, 0 };
+Player chanhoPlayer = { 18, 41, 'C', 30000, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, 0 };
 
 Player players[2] = { hyunseoPlayer, chanhoPlayer };
 
@@ -81,8 +83,8 @@ Factory factory4 = { 11, 12, "factory4", 0, 10, 2, 2 };
 
 Factory factories[4] = { factory1, factory2, factory3, factory4 };
 
-ElectricFactory electricFactory1 = { 7, 4, "electricFactory1", 0, 0, 2 };
-ElectricFactory electricFactory2 = { 11, 4, "electricFactory2", 0, 0, 2 };
+ElectricFactory electricFactory1 = { 7, 4, "electricFactory1", 0, 0, 0, 2, 0 };
+ElectricFactory electricFactory2 = { 11, 4, "electricFactory2", 0, 0, 0, 2, 0 };
 
 ElectricFactory electricFactories[2] = { electricFactory1, electricFactory2 };
 
@@ -97,10 +99,8 @@ void playerInElectricFactory(int index);
 void playerInFactory(int index);
 void playerInWild();
 void playerInCityHall();
-void playerInJob();
 void playerInJewelry();
 void playerInCasino();
-void playerInMarket();
 
 
 void playerInLand(int index){
@@ -160,23 +160,43 @@ void playerInLand(int index){
 	}
 }
 void playerInElectricFactory(int index){
-	//if (electricFactories[index].owner == 1 - turn || electricFactories[index].owner == 2)
-	//{
-	//	printf("남의 전기공장입니다.\n");
-	//}else{
-	//	int a;
-	//	printf("무엇을 하시겠습니까?\n");
-	//	printf("1. 반도체 판매\n");
-	//	printf("2. 공장 돌리기 돌X4, 레드스톤X6, 금X1, 청금석X4, 철X2, 나무X4\n");
-	//	printf("3. 보석 판매\n");
-	//	printf("4. 기계 구매\n");
-	//	scanf("%d", a);
-	//	
-	//	if (a == 1)
-	//	{
-	//		/* code */
-	//	}
-	//}
+	if (electricFactories[index].owner == 1 - turn || electricFactories[index].owner == 2)
+	{
+		printf("남의 전기공장입니다.\n");
+	}else{
+		int a;
+		printf("무엇을 하시겠습니까?\n");
+		printf("1. 반도체 판매\n");
+		printf("2. 공장 돌리기  반도체 세트X1\n");
+		printf("3. 기계 구매\n");
+		scanf("%d", &a);
+		
+		if (a == 1)
+		{
+			players[turn].coin += electricFactories[index].semiConductor * 408000;
+			printf("모두 판매하였습니다.\n");
+		}else if (a == 2)
+		{
+			if (electricFactories[index].semiConductorMachine == 0){
+				if (players[ electricFactories[index].owner ].semiConductorSet > 0){
+					if (electricFactories[index].semiConductorTime == 20){
+						electricFactories[index].semiConductor++;
+						players[ electricFactories[index].owner ].semiConductorSet--;
+					}
+				}
+			}
+		}else if (a == 3)
+		{
+			if (players[turn].coin < 130000)
+			{
+				printf("돈이 부족합니다.\n");
+			}else{
+				players[turn].coin -= 1300000;
+				electricFactories[index].semiConductorMachine += 1;
+			}
+		}
+
+	}
 }
 void playerInFactory(int index){
 	if (factories[index].owner == 1 - turn || factories[index].owner == 2)
@@ -348,10 +368,6 @@ void playerInCityHall(){
 
 	
 }
-void playerInJob(){
-	printf("전기공\n");
-}
-
 void playerInJewelry(){
 	
 	
@@ -454,11 +470,6 @@ void playerInCasino(){
 		printf("%c의 돈이 %d만큼 추가되었습니다.\n",players[whoplayer].name , mc);
 
 }
-void playerInMarket(){
-	//players[turn].coin += players[turn].plant[1] * 
-}
-	
-
 void setupMap () {
 	printf("세금 납부까지: %d\n",1000 - tax);
 	printf("플레이어1 %d원\n", players[0].coin);
@@ -468,11 +479,11 @@ void setupMap () {
 	memcpy( &map[2],  "||||||||||||||||||||||||||||||||        JJJJ        ||||", strlen("                                                        "));
 	memcpy( &map[3],  "||||||||||||||||||||||||||||||||        YYYY        ||||", strlen("                                                        "));
 	memcpy( &map[4],  "||||||||||||||||||||||||||||||||                    ||||", strlen("                                                        "));
-	memcpy( &map[5],  "||||||||||||||||||||||||||||||||                    ||||", strlen("                                                        "));
-	memcpy( &map[6],  "||||LLLL    LLLL||||||||||||||||JJJJ            MMMM||||", strlen("                                                        "));
-	memcpy( &map[7],  "||||5555    4444||||||||||||||||BBBB            kkkk||||", strlen("                                                        "));
-	memcpy( &map[8],  "||||            ||||||||||||||||                    ||||", strlen("                                                        "));
-	memcpy( &map[9],  "||||            ||||||||||||||||                    ||||", strlen("                                                        "));
+	memcpy( &map[5],  "||||||||||||||||||||||||||||||||BBBBB   GGGGG   222 ||||", strlen("                                                        "));
+	memcpy( &map[6],  "||||LLLL    LLLL||||||||||||||||BB  BB GG      22  2||||", strlen("                                                        "));
+	memcpy( &map[7],  "||||5555    4444||||||||||||||||BBBBB  G   GGG    2 ||||", strlen("                                                        "));
+	memcpy( &map[8],  "||||            ||||||||||||||||BB  BB GG    G  22  ||||", strlen("                                                        "));
+	memcpy( &map[9],  "||||            ||||||||||||||||BBBBB   GGGGGG 22222||||", strlen("                                                        "));
 	memcpy( &map[10], "||||LLLL    LLLL||||||||||||||||        CCCC        ||||", strlen("                                                        "));
 	memcpy( &map[11], "||||2222    3333||||||||||||||||        CCCC        ||||", strlen("                                                        "));
 	memcpy( &map[12], "||||            ||||||||||||||||                    ||||", strlen("                                                        "));
@@ -619,7 +630,19 @@ void process () {
 		printf("세금을 납부하기 위해 시청으로 이동시키겠습니다.\n");
 		playerInCityHall();
 	}
+	for ( int i = 0; i < 10; ++i ) {
+		int percent = rand() % 140 + 40; 
+		prices[i] = (prices[i] * percent) / 100;
+	}
 
+ for ( int i = 0; i < 2; ++i ) 
+ {
+ 	electricFactories[i].semiConductorTime++;
+ 	if (electricFactories[i].semiConductorTime >= 20)
+ 	{
+ 		electricFactories[i].semiConductorTime = 0;
+ 	}
+ }
 }
 
 int main () {
