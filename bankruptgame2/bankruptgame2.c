@@ -17,6 +17,7 @@ int cursor = 0;
 int turn = 0;
 int tax = 0;
 
+
 int maxTurn = 1000;
 
 typedef struct {
@@ -27,9 +28,10 @@ typedef struct {
 	int tax;
 	char plant[2];
 	char minerals[6];
-	char meats[3];
 	char Jewelry[10];
 	int semiConductorSet;
+	int wilding;
+	int timer;
 } Player;
 
 typedef struct {
@@ -63,8 +65,8 @@ typedef struct {
 	int semiConductorMachine;
 } ElectricFactory;
 
-Player hyunseoPlayer = { 18, 40, 'H', 30000, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, 0 };
-Player chanhoPlayer = { 18, 41, 'C', 30000, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, 0 };
+Player hyunseoPlayer = { 18, 40, 'H', 30000, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, 0, 0, 0 };
+Player chanhoPlayer = { 18, 41, 'C', 30000, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, 0, 0, 0 };
 
 Player players[2] = { hyunseoPlayer, chanhoPlayer };
 
@@ -174,10 +176,13 @@ void playerInElectricFactory(int index){
 		if (a == 1)
 		{
 			players[turn].coin += electricFactories[index].semiConductor * 408000;
+			electricFactories[index].semiConductor = 0;
 			printf("모두 판매하였습니다.\n");
 		}else if (a == 2)
 		{
-			if (electricFactories[index].semiConductorMachine == 0){
+			if (electricFactories[index].semiConductorMachine){
+				players[turn].coin -= 1000000;
+				players[turn].semiConductorSet += 10;
 				if (players[ electricFactories[index].owner ].semiConductorSet > 0){
 					if (electricFactories[index].semiConductorTime == 20){
 						electricFactories[index].semiConductor++;
@@ -187,7 +192,7 @@ void playerInElectricFactory(int index){
 			}
 		}else if (a == 3)
 		{
-			if (players[turn].coin < 130000)
+			if (players[turn].coin < 1300000)
 			{
 				printf("돈이 부족합니다.\n");
 			}else{
@@ -295,7 +300,7 @@ void playerInRealEstate(){
 	int i = 0;
 	int o = 0; 
 	printf("무엇을 사시겠습니까?\n");
-	printf("1. 땅 (300000만원)\n");
+	printf("1. 땅 (300000원)\n");
 	printf("2. 공장 (2000000원)\n");
 	printf("3. 전기공장 (30000000원)\n");
 	scanf("%d", &i);
@@ -348,12 +353,69 @@ void playerInRealEstate(){
 		electricFactories[o].owner = turn;
 		printf("결제완료 되었습니다.\n");
 	}
-
-
 }
 void playerInWild(){
-	printf("hello Wild\n");
+	if (players[turn].coin < 15000)
+	{
+		printf("돈이 없습니다.\n");
+		getInput();
+	}
+	players[turn].wilding = 1;
+	int first;
+	int thinkfirst;
+	int second;
+	int total = 0;
+	int thinksecond;
+	int percent;
+	int minerals6 = 15 * 2500;
+	int minerals5 = 15 * 2000;
+	int minerals4 = 20 * 1000;
+	int minerals3 = 30 * 250;
+	int minerals2 = 64 * 125;
+	int minerals1 = 300 * 5;
+	int timer = players[turn].timer;
+	for ( ; timer < 20; ) {
+		percent = rand() % 3;
+		first = rand() % 10;
+		second = rand() % 10;
+		printf("%d. 첫 번째 숫자를 적어주세요\n", timer + 1);
+		scanf("%d", &thinkfirst);
+		printf("%d. 두 번째 숫자를 적어주세요\n", timer + 1);
+		scanf("%d", &thinksecond );
+		if ( thinkfirst == first && thinksecond == second) {
+			printf("에메랄드 입니다\n");
+			total += minerals6;			
+		} else if (thinkfirst == first ) {
+			printf("다이아몬드 입니다\n");
+			total += minerals5;
+		} else if (thinksecond == second) {
+			printf("금 입니다\n");
+			total += minerals4;
+		} else if (percent == 0) {
+			printf("철 입니다\n");
+			total += minerals3;
+		} else if (percent == 1) {
+			printf("석탄 입니다\n");
+			total += minerals2;
+		} else if (percent == 2) {
+			printf("돌 입니다\n");
+			total += minerals1;
+		} 
+		timer++;
+		break;
+	}
+	players[turn].coin += total;
+	printf("결제완료 되었습니다. 총: %d원\n", total);
+
+	players[turn].timer = timer;
+	
+	if (players[turn].timer >= 20 ){	
+		players[turn].wilding = 0;
+		printf("야생시간이 끝났습니다.\n");
+	}
+
 }
+
 void playerInCityHall(){
 	if (tax == maxTurn){
 		for ( int i = 0; i < 2; ++i ) {
@@ -365,8 +427,6 @@ void playerInCityHall(){
 		}
 	}
 	tax = 0;
-
-	
 }
 void playerInJewelry(){
 	
@@ -468,12 +528,8 @@ void playerInCasino(){
 		}
 
 		printf("%c의 돈이 %d만큼 추가되었습니다.\n",players[whoplayer].name , mc);
-
 }
 void setupMap () {
-	printf("세금 납부까지: %d\n",1000 - tax);
-	printf("플레이어1 %d원\n", players[0].coin);
-	printf("플레이어2 %d원\n", players[1].coin);
 	memcpy( &map[0],  "||||||||||||||||||||||||||||||||||||||||||||||||||||||||", strlen("                                                        "));
 	memcpy( &map[1],  "||||||||||||||||||||||||||||||||||||||||||||||||||||||||", strlen("                                                        "));
 	memcpy( &map[2],  "||||||||||||||||||||||||||||||||        JJJJ        ||||", strlen("                                                        "));
@@ -500,9 +556,7 @@ void setupMap () {
 	memcpy( &map[23], "||||EEEE    2222222222222222    3333    HHHH    4444||||", strlen("                                                        "));
 	memcpy( &map[24], "||||||||||||||||||||||||||||||||||||||||||||||||||||||||", strlen("                                                        "));
 	memcpy( &map[25], "||||||||||||||||||||||||||||||||||||||||||||||||||||||||", strlen("                                                        "));	
-
 }
-
 void setup () {
 
 	srand(time(NULL));
@@ -521,10 +575,12 @@ void setup () {
 	}
 
 	setupMap();
-
 }
-
 void draw () {
+
+	printf("세금 납부까지: %d\n",1000 - tax);
+	printf("플레이어1 %d원\n", players[0].coin);
+	printf("플레이어2 %d원\n", players[1].coin);
 
 	setupMap();
 
@@ -545,10 +601,17 @@ void draw () {
 		printf("*");
 	}
 	printf("\n");
-
 }
-
 void getInput () {
+
+	printf("Player: %c\n", players[turn].name);
+
+	if (players[turn].wilding == 1)
+	{
+		playerInWild();
+		return;
+	}
+
 	char inputSentense[10];
 	scanf("%s", inputSentense);
 
@@ -597,54 +660,65 @@ void getInput () {
 		playerInJewelry();
 	}
 
-		if ( (qx/2 == 5) && (qy/4 == 10) )
+	if ( (qx/2 == 5) && (qy/4 == 10) )
 	{
 		playerInCasino();
 	}
-		if ( (qx/2 == 11) && (qy/4 == 1))
-		{
-			playerInRealEstate();
-		}
+
+	if ( (qx/2 == 11) && (qy/4 == 1))
+	{
+		playerInRealEstate();
+	}
+
+	if ( (qx/2 == 9) && (qy/4 == 12) )
+	{
+		playerInWild();
+	}
 
 
 	players[turn].x = qx;
 	players[turn].y = qy;
-
 }
-
 void process () {
 	menu[0][cursor] = '.';
 	cursor = (cursor + 1) % W;
 	menu[0][cursor] = '+';
 
-	turn = 1 - turn;
 	for ( int i = 0; i < 5; ++i ) {
 		lands[i].grow++;
 		if (lands[i].growfast == 1){
 		lands[i].grow++;
 		}
 	}
-	tax++;
-	if (tax == maxTurn)
-	{
-		printf("세금을 납부하기 위해 시청으로 이동시키겠습니다.\n");
-		playerInCityHall();
+
+	for ( int i = 0; i < 2; ++i ) {
+		electricFactories[i].semiConductorTime++;
+		if (electricFactories[i].semiConductorTime >= 20) {
+			electricFactories[i].semiConductorTime = 0;
+		}
 	}
+
 	for ( int i = 0; i < 10; ++i ) {
 		int percent = rand() % 140 + 40; 
 		prices[i] = (prices[i] * percent) / 100;
 	}
 
- for ( int i = 0; i < 2; ++i ) 
- {
- 	electricFactories[i].semiConductorTime++;
- 	if (electricFactories[i].semiConductorTime >= 20)
- 	{
- 		electricFactories[i].semiConductorTime = 0;
- 	}
- }
-}
+	tax++;
 
+	if (tax == maxTurn)
+	{
+		printf("세금을 납부하기 위해 시청으로 이동시키겠습니다.\n");
+		playerInCityHall();
+	}
+	if (players[turn].coin < 0)
+	{
+		printf(" GAME OVER \n" );
+		printf(" 플래이어 %c의 승리입니다.\n" ,players[1-turn].name);
+		GAME = 0;
+	}
+
+	turn = 1 - turn;
+}
 int main () {
 
 	setup();
