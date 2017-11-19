@@ -32,6 +32,7 @@ typedef struct {
 	int semiConductorSet;
 	int wilding;
 	int timer;
+    int bankaccount;
 } Player;
 
 typedef struct {
@@ -67,8 +68,15 @@ typedef struct {
 	int semiConductorMachine;
 } ElectricFactory;
 
-Player hyunseoPlayer = { 18, 40, 'H', 30000, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0, 0, 0 };
-Player chanhoPlayer = { 18, 41, 'C', 30000, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0, 0, 0 };
+typedef struct {
+	int x;
+	int y;
+	char name[100];
+	int account[2];
+} Bank;
+
+Player hyunseoPlayer = { 18, 40, 'H', 30000, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0, 0, 0, 0 };
+Player chanhoPlayer = { 18, 41, 'C', 30000, 0,{ 0, 0 }, { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0, 0, 0, 0 };
 
 Player players[2] = { hyunseoPlayer, chanhoPlayer };
 
@@ -76,9 +84,9 @@ Land land1 = { 7, 1, "land1", 0, 10, 2, 1, 0 };
 Land land2 = { 5, 1, "land2", 0, 10, 2, 1, 0 };
 Land land3 = { 5, 3, "land3", 0, 10, 2, 1, 0 };
 Land land4 = { 3, 3, "land4", 0, 10, 2, 1, 0 };
-Land land5 = { 3, 1, "land5", 0, 10, 2, 1, 0 };
 
-Land lands[5] = { land1, land2, land3, land4, land5 };
+
+Land lands[4] = { land1, land2, land3, land4 };
 
 Factory factory1 = { 7, 8, "factory1", 0, 10, 2, 2, 0 };
 Factory factory2 = { 7, 12, "factory2", 0, 10, 2, 2, 0 };
@@ -91,6 +99,8 @@ ElectricFactory electricFactory1 = { 7, 4, "electricFactory1", 0, 0, 0, 2, 0 };
 ElectricFactory electricFactory2 = { 11, 4, "electricFactory2", 0, 0, 0, 2, 0 };
 
 ElectricFactory electricFactories[2] = { electricFactory1, electricFactory2 };
+
+Bank bank= { 3, 1, "Bank", {0, 0} };
 
 long long unsigned int prices[10] = {5000, 10000, 30000, 50000, 100000, 300000, 500000, 1000000, 3000000, 5000000};
 
@@ -105,6 +115,7 @@ void playerInWild();
 void playerInCityHall();
 void playerInJewelry();
 void playerInCasino();
+void playerInBank();
 
 
 void playerInLand(int index){
@@ -369,12 +380,12 @@ void playerInWild() {
 
 	int percent = rand() % 3;
 
-	int minerals6 = 30 * 2500;
-	int minerals5 = 30 * 2000;
-	int minerals4 = 40 * 1000;
-	int minerals3 = 60 * 250;
-	int minerals2 = 128 * 125;
-	int minerals1 = 600 * 5;
+	int minerals6 = 30 * 1500;
+	int minerals5 = 30 * 1200;
+	int minerals4 = 40 * 600;
+	int minerals3 = 60 * 150;
+	int minerals2 = 128 * 75;
+	int minerals1 = 600 * 3;
 
 	printf("첫 번째 숫자: %d\n", thinkfirst);
 	printf("두 번째 숫자:%d\n", thinksecond);
@@ -411,7 +422,21 @@ void playerInWild() {
 void playerInCityHall(){
 	if (tax == maxTurn){
 		for ( int i = 0; i < 2; ++i ) {
-			players[i].coin = players[i].coin / 20 * 19;
+			if (players[i-1].coin > 100000000)
+			{
+				players[i-1].coin = players[i-1].coin / 100 * 65 - 14900000;
+			}else if (players[i-1].coin > 88000000)
+			{
+				players[i-1].coin = players[i-1].coin / 100 * 80 - 5220000;
+			}else if (players[i-1].coin > 46000000)
+			{
+				players[i-1].coin = players[i-1].coin / 100 * 85 - 1080000;
+			}else if (players[i-1].coin > 12000000)
+			{
+				players[i-1].coin = players[i-1].coin / 100 * 94;
+			}else{
+				players[i-1].coin = players[i-1].coin / 100 * 95;
+			}
 			printf("플레이어 %d 세금납부 완료\n",i + 1 );
 			players[i].x = 22;
 			players[i].y = 40;
@@ -488,6 +513,7 @@ void playerInJewelry(){
 		} else {
 			players[turn].coin += prices[u] * i;
 			printf("성공적으로 판매하였습니다.\n");
+			players[turn].jewelry[u] -= i;
 		}
 		
 	}
@@ -501,7 +527,7 @@ void playerInCasino(){
 	printf("2. 너만을 위한 도박\n");
 	printf("3. 우리를 위한 도박\n");
 	scanf("%d", &x);
-	int casino[3] = { 5000, 300000, 100000 };
+	int casino[3] = { 5000, 1500000, 100000 };
 	if (players[turn].coin < casino[x - 1])
 	{
 		printf("돈을 준비해 오십시오...\n");
@@ -514,8 +540,8 @@ void playerInCasino(){
 				players[turn].coin += mc;
 				break;
 			case 2:
-				players[turn].coin -= 300000;
-				mc = rand() % 450000 - 300000;
+				players[turn].coin -= 1500000;
+				mc = rand() % 1500000 - 900000;
 				whoplayer = 1 - turn;
 				players[1 - turn].coin += mc;
 				break;
@@ -532,17 +558,51 @@ void playerInCasino(){
 
 		printf("%c의 돈이 %d만큼 추가되었습니다.\n",players[whoplayer].name , mc);
 }
+void playerInBank(){
+
+	int m;
+	printf("안녕하세요.\n");
+	printf("파산은행입니다.\n");
+	printf("무엇을 하시겠습니까?\n");
+	printf("고객님의 재산: %d원\n", players[turn].coin);
+	printf("고객님의 은행정보: %d\n" ,bank.account[turn] );
+	printf("1. 입금 (계좌에 돈이 있으면 먼저 출급해주십시오) \n");
+	printf("2. 출금\n");
+	scanf("%d", &m );
+	if (m == 1)
+	{
+		int s;
+		printf("얼마를 입금하시겠습니까?\n");
+		scanf("%d", &s );
+		if (players[turn].coin < s)
+		 {
+		 	printf("돈이 부족합니다.\n");
+		 }else{
+		 	players[turn].coin -= s;
+		 	bank.account[turn] = s;
+		 }
+	}else if (m ==2)
+	{
+		printf("출금했습니다.\n");
+		players[turn].coin += bank.account[turn];
+		bank.account[turn] = 0;
+	}
+	printf("안녕히 가십시오\n");
+
+	}
+
+
 void setupMap () {
 	memcpy( &map[0],  "||||||||||||||||||||||||||||||||||||||||||||||||||||||||", strlen("                                                        "));
 	memcpy( &map[1],  "||||||||||||||||||||||||||||||||||||||||||||||||||||||||", strlen("                                                        "));
 	memcpy( &map[2],  "||||||||||||||||||||||||||||||||        JJJJ        ||||", strlen("                                                        "));
 	memcpy( &map[3],  "||||||||||||||||||||||||||||||||        YYYY        ||||", strlen("                                                        "));
 	memcpy( &map[4],  "||||||||||||||||||||||||||||||||                    ||||", strlen("                                                        "));
-	memcpy( &map[5],  "||||||||||||||||||||||||||||||||BBBBB   GGGGG   222 ||||", strlen("                                                        "));
-	memcpy( &map[6],  "||||LLLL    LLLL||||||||||||||||BB  BB GG      22  2||||", strlen("                                                        "));
-	memcpy( &map[7],  "||||4444    3333||||||||||||||||BBBBB  G   GGG    2 ||||", strlen("                                                        "));
-	memcpy( &map[8],  "||||            ||||||||||||||||BB  BB GG    G  22  ||||", strlen("                                                        "));
-	memcpy( &map[9],  "||||            ||||||||||||||||BBBBB   GGGGGG 22222||||", strlen("                                                        "));
+	memcpy( &map[5],  "||||||||||||||||||||||||||||||||                    ||||", strlen("                                                        "));
+	memcpy( &map[6],  "||||bbbb    LLLL||||||||||||||||                    ||||", strlen("                                                        "));
+	memcpy( &map[7],  "||||aaaa    3333||||||||||||||||                    ||||", strlen("                                                        "));
+	memcpy( &map[8],  "||||            ||||||||||||||||                    ||||", strlen("                                                        "));
+	memcpy( &map[9],  "||||            ||||||||||||||||                    ||||", strlen("                                                        "));
 	memcpy( &map[10], "||||LLLL    LLLL||||||||||||||||        CCCC        ||||", strlen("                                                        "));
 	memcpy( &map[11], "||||1111    2222||||||||||||||||        CCCC        ||||", strlen("                                                        "));
 	memcpy( &map[12], "||||            ||||||||||||||||                    ||||", strlen("                                                        "));
@@ -641,7 +701,7 @@ void getInput () {
 	}
 
 
-	for ( int i = 0; i < 5; ++i ) {
+	for ( int i = 0; i < 4; ++i ) {
 		if ( (qx/2 == lands[i].x) && (qy/4 == lands[i].y) ) {
 			playerInLand( i );
 		}
@@ -677,7 +737,10 @@ void getInput () {
 	{
 		playerInWild();
 	}
-
+	if ( (qx/2 == 3) && (qy/4 == 1) )
+	{
+		playerInBank();
+	}
 
 	players[turn].x = qx;
 	players[turn].y = qy;
@@ -708,9 +771,9 @@ void process () {
 	for ( int i = 0; i < 10; ++i ) {
 		int percent = rand() % 140 + 40; 
 		prices[i] = (prices[i] * percent) / 100;
-		if (prices[i] == 0)
+		if (prices[i] == 0 || prices[i] == 1)
 		{
-			prices[i]++;
+			prices[i] += 5000;
 		}
 	}
 	for ( int i = 0; i < 4; ++i ) {
@@ -725,6 +788,9 @@ void process () {
 	}
 
 	tax++;
+	for ( int i = 0; i < 2; ++i ) {
+		bank.account[turn] += bank.account[turn] / 1000 * 1;
+	}
 
 	if (tax == maxTurn)
 	{
