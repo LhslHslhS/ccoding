@@ -54,8 +54,8 @@ Sword Fist = {"주먹", 0, -1, 10};
 
 Sword sword[4] = { Diamond, Iron, Stone, Wood};
 
-Player HyunseoPlayer = {R/2, 0, 'H', 30, 50, 0, Fist, (R+C)/2, 0, R/2, 0 };
-Player ChanhoPlayer = {R/2, C-1, 'C', 30, 50, 0, Fist, (R+C)/2, 0, R/2, C-1 };
+Player HyunseoPlayer = {R/2, 0, 'H', 100, 50, 0, Fist, (R+C)/2, 0, R/2, 0 };
+Player ChanhoPlayer = {R/2, C-1, 'C', 100, 50, 0, Fist, (R+C)/2, 0, R/2, C-1 };
 
 Player players[2][10] = { {HyunseoPlayer }, { ChanhoPlayer }};
  
@@ -76,7 +76,7 @@ Castle castles[10] = {wolhwa, hyunseo, chanho, daewang, joongdong, samtuh, peure
 Tile portals[4] = { {0, C/3, 'P'}, {0, C/3*2, 'P'}, {R-1, C/3, 'P'}, {R-1, C/3*2, 'P'}};
 Tile village[5] = {{ 0, 0, 'v'}, { 0, 0, 'v'}, { 0, 0, 'v'}, { 0, 0, 'v'}, { 0, 0, 'v'}};
 
-
+int timestart = 600;
 
 int coinCount = (int) sqrt(R+C); 
 
@@ -84,7 +84,7 @@ char map[R][C+1];
 
 char input[10];
  
-int timer = 1000;
+int timer = timestart * 5 / 6;
 int castleShowTime;
 
 int turn = 0;
@@ -101,7 +101,6 @@ int totalCastleCount = 10;
 
 int GAME = 1;
 
-int maxTimer = 1000;
 
 void getInput();
 void process();
@@ -109,10 +108,7 @@ void process();
 void playerOnVillage () {
 
 	int coin = players[turn][turnTeam].coin;
-	int input;
-	int input2;
-	int inpetCharacter;
-	char inputCharacter2;
+	char input;
 
 	printf("재산: %d금화 \n",coin );
 	printf("---------------------------------------------------------\n" );
@@ -120,95 +116,103 @@ void playerOnVillage () {
 	printf("2. 철칼 사기              90 금화 \n" );
 	printf("3. 돌칼 사기             70 금화 \n" );
 	printf("4. 나무칼 사기           50 금화 \n" );
-	printf("5. 턴 사기               4 개당 1금화 \n" );
-	printf("6. 백성 모집하기         100 금화 \n" );  
-	printf("7. 방패 사기             60금화 \n" );
-	printf("8. 텔레포트             30금화\n" );
-	printf("9. 포탈 사기             100금화\n" );
+	printf("5. 백성 모집하기         100 금화 \n" );  
+	printf("6. 방패 사기             60금화 \n" );
+	printf("7. 텔레포트             30금화\n" );
+	printf("8. 포탈 사기             100금화\n" );
+	printf("9. 턴 사기               4 개당 1금화 \n" );
 	printf("---------------------------------------------------------\n" );
-	scanf("%d", &input );
+	
+	scanf("%c", &input );
+	scanf("%c", &input );
+
 	int priceCoin[8] = { 100, 90, 70, 50, 100, 60, 30, 100 };
 
-	char inputCharacter = input;
-	int select = inputCharacter - '1';
-	int y;
-	int x;
+	int select = input - '0';
+	int x, y;
 
-	if ( select < 8 && coin < priceCoin[select] ) {
+	if ( select < 1 || select > 9 ) {
+		printf("다시 입력\n");
+		return;
+	}
+
+	if ( coin < priceCoin[select - 1] ) {
 		printf("당신은 돈이 없습니다...\n");
 		playerOnVillage();
 		return;
 	}
-	switch(inputCharacter) {
+
+	switch(input) {
 		case '1':
 		case '2':
 		case '3':
 		case '4':
-			players[turn][turnTeam].sword = sword[select];
-			coin -= priceCoin[select];
+			players[turn][turnTeam].sword = sword[select-1];
+			players[turn][turnTeam].coin -= priceCoin[select-1];
 			break;
 		case '5':
-			
+			{
+				char nameString[10];
+				char name;
+				printf("백성의 이름?\n");
+				scanf("%s", nameString );
+				name = nameString[0];
+
+				y = ( turn == 0 ) ? 0 : C-1;
+
+				players[turn][teamCount[turn]] = (Player) {R/2, 0, name, 30, 50, 0, Fist, (R+C)/2, 0, R/2, 0 };
+				teamCount[turn]++;
+				players[turn][0].coin -= priceCoin[select];
+				printf("끝!!!!!\n");
+				break;
+			}
+		case '6':
+			players[turn][0].coin -= priceCoin[select];
+			players[turn][turnTeam].shield += 3;
+			break;
+		case '7':
+			printf("텔레포트할 좌표를 적어주십시오. x는 %d y는 %d 까지입니다.\n", R, C);
+			scanf("%d", &x );
+			scanf("%d", &y );
+			if (x < 0|| x > R) {
+				printf("안녕히 가세요 돈은 감사히 받겠습니다.\n");
+			} else if (y < 0|| y > C) {
+				printf("안녕히 가세요 돈은 감사히 받겠습니다.\n");
+			}
+			players[turn][0].coin -= priceCoin[select-1];
+			qx = x;
+			qy = y;
+			break;
+		case '8':
+			//players[turn].x = players[turn].portalX;
+			printf("포탈을 설치할 좌표를 적어주십시오. x는 %d y는 %d\n" ,R, C);
+			scanf("%d",&x );
+			scanf("%d",&y );
+			if (x < 0|| x > R) {
+				printf("안녕히 가세요 돈은 감사히 받겠습니다.\n");
+			} else if (y < 0|| y > C) {
+				printf("안녕히 가세요 돈은 감사히 받겠습니다.\n");
+			}
+			players[turn][0].coin -= priceCoin[select];
+			qx = x;
+			qy = y;
+			break;
+		case '9':
+			{
+				int inpetCharacter;
 				printf("server: 턴을 얼만큼 사시겠습니까?\n");
 				scanf("%d", &inpetCharacter); 
-				if ( inpetCharacter < 0 || inpetCharacter > 4 * players[turn][0].coin)
-				{
+				if ( inpetCharacter < 0 || inpetCharacter > 4 * players[turn][0].coin) {
 					printf("server: 너 돈 없지?\nplayer:네! \nserver: 잘가 \nplayer: 안녕히 계세요 \n");
 					playerOnVillage();
-				}else {
+				} else {
 					inpetCharacter = (inpetCharacter/4) * 4;
 					players[turn][0].coin -= inpetCharacter/4;
 					players[turn][0].moves += inpetCharacter;
 				}
 				printf("턴 거래 완료\n");
 				break;
-		case '6':
-			printf("백성의 이름?\n");
-			scanf("%d", &input2 );
-			inputCharacter2 = input2;
-
-			y = ( turn == 0 ) ? 0 : C-1;
-
-			players[turn][teamCount[turn]] = (Player) {R/2, 0, inputCharacter2, 30, 50, 0, Fist, (R+C)/2, 0, R/2, 0 };
-			teamCount[turn]++;
-			players[turn][0].coin -= priceCoin[select];
-			printf("끝!!!!!\n");
-			break;
-		case '7':
-			players[turn][0].coin -= priceCoin[select];
-			players[turn][turnTeam].shield += 3;
-			break;
-		case '8':
-			printf("텔레포트할 좌표를 적어주십시오. x는 %d y는 %d 까지입니다.\n", R, C);
-			scanf("%d", &x );
-			scanf("%d", &y );
-			if (x < 0|| x > R)
-			{
-				printf("안녕히 가세요 돈은 감사히 받겠습니다.\n");
-			}else if (y < 0|| y > C)
-			{
-				printf("안녕히 가세요 돈은 감사히 받겠습니다.\n");
 			}
-			players[turn][0].coin -= priceCoin[select];
-			players[turn][0].x = x;
-			players[turn][0].y = y;
-			break;
-		case '9':
-			//players[turn].x = players[turn].portalX;
-			printf("포탈을 설치할 좌표를 적어주십시오. x는 %d y는 %d\n" ,R, C);
-			scanf("%d",&x );
-			scanf("%d",&y );
-			if (x < 0|| x > R)
-			{
-				printf("안녕히 가세요 돈은 감사히 받겠습니다.\n");
-			}else if (y < 0|| y > C)
-			{
-				printf("안녕히 가세요 돈은 감사히 받겠습니다.\n");
-			}
-			players[turn][0].coin -= priceCoin[select];
-			players[turn][0].x = x;
-			players[turn][0].y = y;
-			break;
 		default:
 			break;
 		}
@@ -319,6 +323,9 @@ void playerOnCoin () {
 }
 
 void setup () {
+
+	srand(time(NULL));
+
 	for ( int i = 0; i < R; ++i ) {
 		for ( int j = 0; j < C; ++j ) {
 			map[i][j] = ' ';
@@ -377,6 +384,7 @@ void draw () {
 		map[portals[i].x][portals[i].y] = portals[i].name;
 	}
 
+
 	for ( int i = 0; i < 5; ++i ) {
 		map[village[i].x][village[i].y] = village[i].name;
 	}
@@ -406,15 +414,15 @@ void draw () {
 	char blockHorizontal = '-';
 	char blockVertical = '|';
 
-	if (timer < maxTimer)
-	{
-		printf("공격까지 남은 시간: %d\n", timer );
-	}else if (timer < 0)
+	if (timer <= 0)
 	{
 		printf("현재 공격가능 \n");
-		printf("공격 불가까지: %d\n", abs(timer) );
+		printf("공격 불가능까지: %d\n", abs(timer) );
 		blockHorizontal = '*';
 		blockVertical = '*';
+	}else if (timer <= timestart)
+	{
+		printf("공격까지 남은 시간: %d\n", timer );
 	}
 	
 	for ( int i = 0; i < C+2; ++i ) {
@@ -463,9 +471,26 @@ void getInput () {
 
 	if ( strcmp(input, "reset") == 0) {
 		setup();
-		timer--;
+		timer = timestart;
+		castleShowTime = 0;
 		turn = 1;
 		turnTeam = 0;
+
+		players[0][0] = HyunseoPlayer;
+		players[1][0] = ChanhoPlayer;
+		castles[0] = wolhwa;
+		castles[1] = hyunseo;
+		castles[2] = chanho;
+		castles[3] = daewang;
+		castles[4] = joongdong,
+		castles[5] = samtuh;
+		castles[6] = peureun;
+		castles[7] = beahm;
+		castles[8] = apple;
+		castles[9] = samsung;
+
+
+
 		return;
 	}
 
@@ -534,39 +559,18 @@ void getInput () {
 		}
 	}
 
-	if (castleShowTime == 9900) {
-		printf("%s성이 공개되었습니다.\n",castles[9].Fullname);
-		castles[9].show = 1;
-	} else if (castleShowTime == 8800) {
-		printf("%s성이 공개되었습니다.\n",castles[8].Fullname);
-		castles[8].show = 1;
-	} else if (castleShowTime == 7700) {
-		printf("%s성이 공개되었습니다.\n",castles[7].Fullname);
-		castles[7].show = 1;
-	} else if (castleShowTime == 6600) {
-		printf("%s성이 공개되었습니다.\n",castles[6].Fullname);
-		castles[6].show = 1;
-	} else if (castleShowTime == 5500) {
-		printf("%s성이 공개되었습니다.\n",castles[5].Fullname);
-		castles[5].show = 1;
-	} else if (castleShowTime == 4400) {
-		printf("%s성이 공개되었습니다.\n",castles[4].Fullname);
-		castles[4].show = 1;
-	} else if (castleShowTime == 3300) {
-		printf("%s성이 공개되었습니다.\n",castles[3].Fullname);
-		castles[3].show = 1;
-	} else if (castleShowTime == 2200) {
-		printf("%s성이 공개되었습니다.\n",castles[2].Fullname);
-		castles[2].show = 1;
-	} else if (castleShowTime == 1100) {
-		printf("%s성이 공개되었습니다.\n",castles[1].Fullname);
-		castles[1].show = 1;
+	for ( int i = 0; i < 9; ++i ) {
+		if (castleShowTime == i * timestart) {
+		printf("%s성이 공개되었습니다.\n",castles[i].Fullname);
+		castles[i].show = 1;
+		}
 	}
 
 	if ( map[qx][qy] == '*' ) {
 		playerOnCoin();
 	}
-	if (map[qx][qy] == 'V'){
+
+	if (map[qx][qy] == 'v'){
 		playerOnVillage();
 	}
 
@@ -602,8 +606,8 @@ void process () {
 		turn = 1 - turn;
 	}
 
-	if (timer < -100) {
-		timer = maxTimer;
+	if (timer < -1 * timestart / 6) {
+		timer = timestart;
 	}
 	timer--;
 
