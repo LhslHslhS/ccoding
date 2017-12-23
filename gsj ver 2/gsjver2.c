@@ -19,7 +19,7 @@ typedef struct {
 	int x;
 	int y;
 	char name;
-	int coin;
+	float coin;
 	int probability;
 	int castleCount;
 	Sword sword;
@@ -34,7 +34,7 @@ typedef struct {
 	int x;
 	int y;
 	char name;
-	char Fullname[10];
+	char Fullname[20];
 	int lives;
 	int rotation;
 	char owner;
@@ -60,19 +60,28 @@ Player ChanhoPlayer = {R/2, C-1, 'C', 50, 50, 0, Fist, (R+C)/2, 0, -1, -1, 0 };
 
 Player players[2][10] = { {HyunseoPlayer }, { ChanhoPlayer }};
  
-Castle wolhwa = { 0, 0, 'w', "월화", 3, 0, 0, 0};
-Castle hyunseo = { 0, 0, 'h', "현서", 3, 0, 0, 0};
-Castle chanho = { 0, 0, 'c', "찬호", 3, 0, 0, 0};
-Castle daewang = { 0, 0, 'd', "대왕", 3, 0, 0, 0};
-Castle joongdong = { 0, 0, 'j', "중동", 3, 0, 0, 0};
-Castle samtuh = { 0, 0, 'c', "샘터", 3, 0, 0, 0};
-Castle peureun = { 0, 0, 'c', "푸른", 3, 0, 0, 0};
-Castle beahm = { 0, 0, 'c', "비암", 3, 0, 0, 0};
-Castle apple = { 0, 0, 'c', "애플", 3, 0, 0, 0};
-Castle samsung = { 0, 0, 'c', "삼성", 3, 0, 0, 0};
+Castle wolhwa = { 0, 0, 'w', "월화", 2, 0, 0, 0};
+Castle hyunseo = { 0, 0, 'h', "현서", 2, 0, 0, 0};
+Castle chanho = { 0, 0, 'c', "찬호", 2, 0, 0, 0};
+Castle daewang = { 0, 0, 'd', "대왕", 2, 0, 0, 0};
+Castle joongdong = { 0, 0, 'j', "중동", 2, 0, 0, 0};
+Castle samtuh = { 0, 0, 't', "샘터", 2, 0, 0, 0};
+Castle peureun = { 0, 0, 'p', "푸른", 2, 0, 0, 0};
+Castle beahm = { 0, 0, 'b', "비암", 2, 0, 0, 0};
+Castle apple = { 0, 0, 'a', "애플", 2, 0, 0, 0};
+Castle samsung = { 0, 0, 's', "삼성", 2, 0, 0, 0};
+Castle newyork = { 0, 0, 'n', "뉴욕", 2, 0, 0, 0};
+Castle london = { 0, 0, 'l', "런던", 2, 0, 0, 0};
+Castle geneva = { 0, 0, 'g', "제네바", 2, 0, 0, 0};
+Castle edinburough = { 0, 0, 'e', "에든버러", 2, 0, 0, 0};
+Castle florence = { 0, 0, 'f', "플로렌스", 2, 0, 0, 0};
+Castle istanbul = { 0, 0, 'i', "이스탄불", 2, 0, 0, 0};
+Castle kyoto = { 0, 0, 'k', "교토", 2, 0, 0, 0};
+Castle moscow = { 0, 0, 'm', "모스크바", 2, 0, 0, 0};
+Castle oxford = { 0, 0, 'o', "옥스포드", 2, 0, 0, 0};
+Castle quebec = { 0, 0, 'q', "퀘백", 2, 0, 0, 0};
 
-
-Castle castles[10] = {wolhwa, hyunseo, chanho, daewang, joongdong, samtuh, peureun, beahm, apple, samsung};
+Castle castles[20] = {wolhwa, hyunseo, chanho, daewang, joongdong, samtuh, peureun, beahm, apple, samsung, newyork, london, geneva, edinburough, florence, istanbul, kyoto, moscow, oxford, quebec};
 
 Tile portals[4] = { {0, C/3, 'P'}, {0, C/3*2, 'P'}, {R-1, C/3, 'P'}, {R-1, C/3*2, 'P'}};
 Tile village[5] = {{ 0, 0, 'v'}, { 0, 0, 'v'}, { 0, 0, 'v'}, { 0, 0, 'v'}, { 0, 0, 'v'}};
@@ -132,7 +141,7 @@ void playersOnCasino () {
 	}else if (casinoing == 1)
 	{
 		printf("베팅금을 정해주십시오\n");
-		printf("현재 재산: %d\n",players[turn][turnTeam].coin );
+		printf("현재 재산: %f\n",players[turn][turnTeam].coin );
 		scanf("%d",&price );
 		if (players[turn][turnTeam].coin < price)
 		{
@@ -141,19 +150,19 @@ void playersOnCasino () {
 		}else{
 			int sign = 2 * (rand() % 2) - 1;
 			int percents = rand() % 100;
-			printf("결과: %+d\n", price * percents / 100 * sign);
-			players[turn][turnTeam].coin += price * percents / 100 * sign;
-			printf("도박 후 재산: %d\n", players[turn][turnTeam].coin);
+			printf("결과: %+d\n", (price * percents / 100 * sign) + 2);
+			players[turn][turnTeam].coin += (price * percents / 100 * sign) + 2;
+			printf("도박 후 재산: %f\n", players[turn][turnTeam].coin);
 		}
 	}
 }
 
 void playerOnVillage () {
 
-	int coin = players[turn][turnTeam].coin;
+	float coin = players[turn][turnTeam].coin;
 	char input;
 
-	printf("재산: %d금화 \n",coin );
+	printf("재산: %f금화 \n",coin );
 	printf("---------------------------------------------------------\n" );
 	printf("1. 다이아칼 사기         100 금화 \n" );
 	printf("2. 철칼 사기              90 금화 \n" );
@@ -419,7 +428,7 @@ void draw () {
 		map[village[i].x][village[i].y] = village[i].name;
 	}
 
-	for ( int i = 0; i < 8; ++i ) {
+	for ( int i = 0; i < 20; ++i ) {
 		if (castles[i].show)
 			map[castles[i].x][castles[i].y] = castles[i].name;
 	}
@@ -470,7 +479,7 @@ void draw () {
 
 void getInfo () {
 	printf("정보-----------\n");
-	printf("          돈: %d금화\n", players[turn][0].coin );
+	printf("          돈: %f금화\n", players[turn][0].coin );
 	printf("          턴: %d\n", players[turn][0].moves);
 	printf("          칼: %s칼\n", players[turn][turnTeam].sword.name );
 	printf("      내구도: %d\n", players[turn][turnTeam].sword.durability );
@@ -513,12 +522,22 @@ void getInput () {
 		castles[1] = hyunseo;
 		castles[2] = chanho;
 		castles[3] = daewang;
-		castles[4] = joongdong,
+		castles[4] = joongdong;
 		castles[5] = samtuh;
 		castles[6] = peureun;
 		castles[7] = beahm;
 		castles[8] = apple;
 		castles[9] = samsung;
+		castles[10] = newyork;
+		castles[11] = london;
+		castles[12] = geneva;
+		castles[13] = edinburough;
+		castles[14] = florence ;
+		castles[15] = istanbul;
+		castles[16] = kyoto;
+		castles[17] = moscow;
+		castles[18] = oxford;
+		castles[19] = quebec;
 
 
 
@@ -591,22 +610,23 @@ void getInput () {
 
 	castleShowTime++;
 
-	for ( int i = 0; i < 10; ++i ) {
+	for ( int i = 0; i < 20; ++i ) {
 		if ( map[qx][qy] == castles[i].name && castles[i].show ) {
 			playerOnCastle( i );
 		}
 	}
 
 	for ( int i = 0; i < 10; ++i ) {
-		if (castleShowTime == i * timestart) {
-		printf("%s성이 공개되었습니다.\n",castles[i].Fullname);
+		if (castleShowTime == (i + 1) * timestart ) {
+		printf("%s성이 공개되었습니다.\n",castles[i].Fullname );
+		printf("%s성이 공개되었습니다.\n",castles[10 + i].Fullname );
 
 		int tmpx, tmpy;
 		do{
 	
 			tmpx = rand() % (R-2) + 1;
 			tmpy = rand() % (C-2) + 1;
-	
+
 		} while ( map[tmpx][tmpy] != ' ' ||
 				  map[tmpx][tmpy-1] != ' ' ||
 				  map[tmpx][tmpy+1] != ' ' ||
@@ -616,10 +636,32 @@ void getInput () {
 				  map[tmpx+1][tmpy] != ' ' ||
 				  map[tmpx+1][tmpy-1] != ' ' ||
 				  map[tmpx+1][tmpy+1] != ' ' );
-	
+
+		map[tmpx][tmpy] = castles[i].name;
 		castles[i].x = tmpx;
 		castles[i].y = tmpy;
 		castles[i].show = 1;
+
+		do{
+	
+			tmpx = rand() % (R-2) + 1;
+			tmpy = rand() % (C-2) + 1;
+
+		} while ( map[tmpx][tmpy] != ' ' ||
+				  map[tmpx][tmpy-1] != ' ' ||
+				  map[tmpx][tmpy+1] != ' ' ||
+				  map[tmpx-1][tmpy] != ' ' ||
+				  map[tmpx-1][tmpy-1] != ' ' ||
+				  map[tmpx-1][tmpy+1] != ' ' ||
+				  map[tmpx+1][tmpy] != ' ' ||
+				  map[tmpx+1][tmpy-1] != ' ' ||
+				  map[tmpx+1][tmpy+1] != ' ' );
+
+		map[tmpx][tmpy] = castles[10 + i].name;
+		castles[10 + i].x = tmpx;
+		castles[10 + i].y = tmpy;
+		castles[10 + i].show = 1;
+
 		}
 	}
 
@@ -643,7 +685,7 @@ void getInput () {
 }
 
 void process () {	
-	players[turn][0].coin += players[turn][0].castleCount;
+	players[turn][0].coin += players[turn][0].castleCount * (rand() % 10 / 10.0);
 
 	players[turn][0].moves--;
 
