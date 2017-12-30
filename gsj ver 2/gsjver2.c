@@ -75,7 +75,7 @@ Castle samsung = { 0, 0, 's', "삼성", 2, 0, 0, 0, 2000, 2000};
 Castle newyork = { 0, 0, 'n', "뉴욕", 2, 0, 0, 0, 200, 200};
 Castle london = { 0, 0, 'l', "런던", 2, 0, 0, 0, 500, 500};
 Castle geneva = { 0, 0, 'g', "제네바", 2, 0, 0, 0, 800, 800};
-Castle edinburough = { 0, 0, 'e', "에든버러", 2, 0, 0, 0, 900, 900};
+Castle edinburgh = { 0, 0, 'e', "에든버러", 2, 0, 0, 0, 900, 900};
 Castle florence = { 0, 0, 'f', "플로렌스", 2, 0, 0, 0, 1000, 1000};
 Castle istanbul = { 0, 0, 'i', "이스탄불", 2, 0, 0, 0, 1200, 1200};
 Castle kyoto = { 0, 0, 'k', "교토", 2, 0, 0, 0, 1300, 1300};
@@ -83,7 +83,7 @@ Castle moscow = { 0, 0, 'm', "모스크바", 2, 0, 0, 0, 1500, 1500};
 Castle oxford = { 0, 0, 'o', "옥스포드", 2, 0, 0, 0, 1700, 1700};
 Castle quebec = { 0, 0, 'q', "퀘백", 2, 0, 0, 0, 2000, 2000};
 
-Castle castles[20] = {wolhwa, hyunseo, chanho, daewang, joongdong, samtuh, peureun, beahm, apple, samsung, newyork, london, geneva, edinburough, florence, istanbul, kyoto, moscow, oxford, quebec};
+Castle castles[20] = {wolhwa, hyunseo, chanho, daewang, joongdong, samtuh, peureun, beahm, apple, samsung, newyork, london, geneva, edinburgh, florence, istanbul, kyoto, moscow, oxford, quebec};
 
 Tile portals[4] = { {0, C/3, 'P'}, {0, C/3*2, 'P'}, {R-1, C/3, 'P'}, {R-1, C/3*2, 'P'}};
 Tile village[5] = {{ 0, 0, 'v'}, { 0, 0, 'v'}, { 0, 0, 'v'}, { 0, 0, 'v'}, { 0, 0, 'v'}};
