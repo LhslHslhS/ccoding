@@ -49,7 +49,7 @@ typedef struct{
 	char name;
 } Tile;
 
-Sword Diamond = {"다이아", 4, 2, 360};
+Sword Diamond = {"다이아", 4, 2, 60};
 Sword Iron = {"철", 3, 3, 45};
 Sword Stone = {"돌", 2, 4, 30};
 Sword Wood = {"나무", 1, 5, 15};
@@ -57,7 +57,7 @@ Sword Fist = {"주먹", 0, -1, 10};
 
 Sword sword[4] = { Diamond, Iron, Stone, Wood};
 
-Player HyunseoPlayer = {R/2, 0, 'H', 30, 50, 0, Diamond, (R+C)/2* 5000, 0, -1, -1, 0 };
+Player HyunseoPlayer = {R/2, 0, 'H', 30, 50, 0, Fist, (R+C)/2, 0, -1, -1, 0 };
 Player ChanhoPlayer = {R/2, C-1, 'C', 30, 50, 0, Fist, (R+C)/2, 0, -1, -1, 0 };
 
 Player players[2][10] = { {HyunseoPlayer }, { ChanhoPlayer }};
@@ -96,7 +96,7 @@ char map[R][C+1];
 
 char input[10];
  
-int timer = timestart * 1 / 6;
+int timer = timestart * 5 / 6;
 int castleShowTime;
 
 int turn = 0;
@@ -170,7 +170,7 @@ void playerOnVillage () {
 	printf("2. 철칼 사기              90 금화 \n" );
 	printf("3. 돌칼 사기             70 금화 \n" );
 	printf("4. 나무칼 사기           50 금화 \n" );
-	printf("5. 백성 모집하기         100 금화 \n" );  
+	printf("5. 백성 모집하기         1<<31 금화 \n" );  
 	printf("6. 방패 사기             60금화 \n" );
 	printf("7. 텔레포트             50금화\n" );
 	printf("8. 포탈 사기             100금화\n" );
@@ -180,7 +180,7 @@ void playerOnVillage () {
 	scanf("%c", &input );
 	scanf("%c", &input );
 
-	int priceCoin[8] = { 100, 90, 70, 50, 100, 60, 50, 100 };
+	int priceCoin[8] = { 100, 90, 70, 50, 1<<31, 60, 50, 100 };
 
 	int select = input - '0';
 	int x, y;
@@ -387,8 +387,31 @@ void playerOnPlayer ( int i ) {
 void playerOnCoin () {
 	int value = rand() % 10;
 	printf("Player %c의 금화가 %d만큼 늘었습니다.\n",players[turn][turnTeam].name, value );
-	players[turn][turnTeam].coin += value;
+	players[turn][turnTeam].coin += value; 
 }
+
+
+float evaluateMap() {
+
+	float point = 0;
+	float penalty = 0;
+	float length = 0;
+
+	for ( int i = 0; i < 5; ++i ) {
+		for ( int j = i + 1; j < 5; ++j ) {
+			length = sqrt((village[i].x - village[j].x) * (village[i].x - village[j].x) + (village[i].y - village[j].y) * (village[i].y - village[j].y));
+			point += length;
+			if (length <= 16) 
+			{
+				penalty += -2 * length + 32;
+			}
+			
+		}
+	}
+	return point - penalty;
+
+}
+
 
 void setup () {
 
@@ -400,20 +423,29 @@ void setup () {
 		}
 	}
 	
-	for ( int i = 0; i < 5; ++i ) {
-		int tmpx, tmpy;
+	float point = 0;
 	
-		do {
-	
-			tmpx = rand() % (R-2) + 1;
-			tmpy = rand() % (C-2) + 1;
-	
-		} while ( map[tmpx][tmpy] != ' ' && map[tmpx][tmpy] != '$' );
+	while(point < 220) {
+		for ( int i = 0; i < 5; ++i ) {
+			int tmpx, tmpy;
+		
+			do {
+		
+				tmpx = rand() % (R-2) + 1;
+				tmpy = rand() % (C-2) + 1;
+		
+			} while ( map[tmpx][tmpy] != ' ' && map[tmpx][tmpy] != '$' );
 
-		village[i].x = tmpx;
-		village[i].y = tmpy;
+			village[i].x = tmpx;
+			village[i].y = tmpy;
 
+		}
+
+		point = evaluateMap();
 	}
+
+	printf("%f\n", point);
+
 }
 void draw () {
 
@@ -453,7 +485,7 @@ void draw () {
 			tmpy = rand() % (C-2) + 1;		
 		}while ( map[tmpx][tmpy] != ' ' );
 
-		map[tmpx][tmpy] = '*';
+		map[tmpx][tmpy] = '*'; 
 	}
 
 	char blockHorizontal = '-';
@@ -537,7 +569,7 @@ void getInput () {
 		castles[10] = newyork;
 		castles[11] = london;
 		castles[12] = geneva;
-		castles[13] = edinburough;
+		castles[13] = edinburgh;
 		castles[14] = florence ;
 		castles[15] = istanbul;
 		castles[16] = kyoto;
