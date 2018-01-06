@@ -1108,6 +1108,5 @@ int main () {
 	}
 
 	printf("server: 게임이 종료되었습니다.\n");	
-
 	return 0;
 }	
