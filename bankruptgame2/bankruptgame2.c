@@ -19,6 +19,7 @@ int tax = 0;
 
 
 int maxTurn = 1000;
+int lastprice[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 typedef struct {
 	int x;
@@ -104,6 +105,8 @@ Bank bank= { 3, 1, "Bank", {0, 0} };
 
 long long unsigned int prices[10] = {5000, 10000, 30000, 50000, 100000, 300000, 500000, 1000000, 3000000, 5000000};
 
+char jewelry[10][100] = {"기념 주화","은 귀걸이","금 팔지","다이아몬드 반지","에메랄드 목걸이","사파이어 머리핀","토파즈 브로치","루비 티아라","타파이트 토로피","화려한 구슬"};
+
 void process();
 void getInput();
 void draw();
@@ -180,23 +183,27 @@ void playerInElectricFactory(int index){
 		printf("3. 기계 구매\n");
 		scanf("%d", &a);
 		if (a == 1) {
-			players[turn].coin += 408000;
+			
+			players[turn].coin += 204000 *  electricFactories[index].semiConductor;
+			
+			printf("가격: 204000 X %d\n", electricFactories[index].semiConductor);
 			electricFactories[index].semiConductor = 0;
 			printf("모두 판매하였습니다.\n");
 		} else if (a == 2) {
-			if (electricFactories[index].semiConductorMachine){
-				if (players[turn].coin >= 100000){ 
-					players[turn].coin -= 100000;
-					players[turn].semiConductorSet += 10;
-					if ( players[ electricFactories[index].owner ].semiConductorSet > 0 &&
-						 electricFactories[index].semiConductorTime == 20 ){
-						electricFactories[index].semiConductor++;
-						players[ electricFactories[index].owner ].semiConductorSet--;
-					}
-				} else {
+			printf("%d\n",electricFactories[index].semiConductorTime);
+			if (electricFactories[index].semiConductorMachine == 1){
+				if (players[turn].coin < 100000)
+				{
 					printf("돈이 부족합니다.\n");
 				}
+				players[turn].coin -= 100000;
+				electricFactories[index].semiConductor++;
+					
+				
+			}else{
+				printf("기계가 없습니다.\n");
 			}
+			
 		} else if (a == 3) {
 			if (players[turn].coin < 1300000) {
 				printf("돈이 부족합니다.\n");
@@ -303,7 +310,7 @@ void playerInRealEstate(){
 	int o = 0; 
 	printf("무엇을 사시겠습니까?\n");
 	printf("1. 땅 (300000원)\n");
-	printf("2. 공장 (2000000원)\n");
+	printf("2. 공장 (5000000원)\n");
 	printf("3. 전기공장 (30000000원)\n");
 	scanf("%d", &i);
 	printf("어떤 것을 사시겠습니까?\n");
@@ -327,7 +334,7 @@ void playerInRealEstate(){
 	}
 	else if (i == 2)
 	{
-		if (players[turn].coin < 2000000)
+		if (players[turn].coin < 5000000)
 		{
 			printf("돈이 부족합니다.\n");
 			return;
@@ -337,7 +344,7 @@ void playerInRealEstate(){
 			printf("주인이 있습니다.\n" );
 			return;
 		}
-		players[turn].coin -= 2000000;
+		players[turn].coin -= 5000000;
 		factories[o].owner = turn;
 		printf("결제완료 되었습니다.\n");
 	}
@@ -362,13 +369,14 @@ void playerInWild() {
 	if (players[turn].coin < 15000)
 	{
 		printf("돈이 없습니다.\n");
-		getInput();
+		return;
+		
 	}
 	
 	if (players[turn].wilding == 0)
 	{
 		players[turn].wilding = 1;
-		players[turn].coin -= 15000;
+		players[turn].coin -= 1500;
 	}
 
 	int total = 0;
@@ -380,12 +388,12 @@ void playerInWild() {
 
 	int percent = rand() % 3;
 
-	int minerals6 = 30 * 1500;
-	int minerals5 = 30 * 1200;
-	int minerals4 = 40 * 600;
-	int minerals3 = 60 * 150;
-	int minerals2 = 128 * 75;
-	int minerals1 = 600 * 3;
+	int minerals6 = 30 * 150;
+	int minerals5 = 30 * 120;
+	int minerals4 = 40 * 60;
+	int minerals3 = 60 * 15;
+	int minerals2 = 128 * 15;
+	int minerals1 = 60 * 3;
 
 	printf("첫 번째 숫자: %d\n", thinkfirst);
 	printf("두 번째 숫자:%d\n", thinksecond);
@@ -450,16 +458,15 @@ void playerInJewelry(){
 	printf("플레이어1 %d원\n", players[0].coin);
 	printf("플레이어2 %d원\n", players[1].coin);
 	printf("-----------------------------------\n" );
-	printf("0.기념주화 가격: %llu\n",  prices[0] );
-	printf("1.은 귀걸이 가격: %llu\n",  prices[1] );
-	printf("2.금 팔찌 가격: %llu\n",  prices[2] );
-	printf("3.다이아몬드 반지 가격: %llu\n", prices[3] );
-	printf("4.에메랄드 목걸이 가격: %llu\n", prices[4] );
-	printf("5.사파이어 머리핀 가격: %llu\n", prices[5] );
-	printf("6.토파즈 브로치 가격: %llu\n", prices[6] );
-	printf("7.루비 티아라 가격: %llu\n", prices[7] );
-	printf("8.타파이트 트로피 가격: %llu\n",  prices[8] );
-	printf("9.화려한 구슬 가격: %llu\n\n",  prices[9] );
+	for ( int i = 0; i < 10; ++i ) {
+		if (prices[i] >= lastprice[i]) {
+			printf("%d.%s 가격: %llu ▲%llu\n", i, jewelry[i] ,prices[i] , prices[i] - lastprice[i]);
+		} else {
+			printf("%d.%s 가격: %llu ▽%llu\n", i, jewelry[i] ,prices[i] , lastprice[i] - prices[i]);
+		}
+	}
+
+
 	printf("-----------------------------------\n" );
 	printf("무엇을 하시겠습니까?\n");
 	printf("1. 사기\n");
@@ -523,14 +530,15 @@ void playerInCasino(){
 	int whoplayer = 0;
 	int mc = 0;
 	int sign = 1;
-	printf("1. 나를 위한 도박\n");
-	printf("2. 너만을 위한 도박\n");
-	printf("3. 우리를 위한 도박\n");
+	printf("1. 나를 위한 도박 5천원\n");
+	printf("2. 너만을 위한 도박 15만원 \n");
+	printf("3. 우리를 위한 도박 10만원 \n");
 	scanf("%d", &x);
 	int casino[3] = { 5000, 1500000, 100000 };
 	if (players[turn].coin < casino[x - 1])
 	{
 		printf("돈을 준비해 오십시오...\n");
+		return;
 	}
 		switch(x){
 			case 1:
@@ -767,15 +775,26 @@ void process () {
 			electricFactories[i].semiConductorTime = 0;
 		}
 	}
-
+	
+	int MunicipalRate[10] = {10000, 16000, 20000, 30000, 32000, 100000, 160000, 200000, 1000000, 2000000};
+	
 	for ( int i = 0; i < 10; ++i ) {
-		int percent = rand() % 140 + 40; 
-		prices[i] = (prices[i] * percent) / 100;
-		if (prices[i] == 0 || prices[i] == 1)
+		lastprice[i] = prices[i];
+		prices[i] += rand() % MunicipalRate[i] - (MunicipalRate[i]) / 2;
+
+		if (prices[i] < (MunicipalRate[i]) / 2)
 		{
-			prices[i] += 5000;
+			prices[i] = (MunicipalRate[i]) / 2;
 		}
+
+
 	}
+
+
+
+
+
+	
 	for ( int i = 0; i < 4; ++i ) {
 		if (factories[i].ing == 1){
 			for ( int i = 0; i < 4; ++i ) {

@@ -101,7 +101,7 @@ char map[R][C+1];
 
 char input[10];
  
-int timer = timestart * 5 / 6;
+int timer = timestart * 2 / 3;
 int castleShowTime;
 
 int turn = 0;
@@ -206,9 +206,9 @@ void playerOnVillage () {
 		case '1':
 			{	
 				players[turn][turnTeam].coin -= priceCoin[select-1];
-				int type = rand() % 5 + 3;
-				int durability = rand() % 8 + 3;
-				int strengh = rand() % 260 - 60;
+				int type = rand() % 20;
+				int durability = rand() % 2 + 3;
+				int strengh = rand() % 160 - 60;
 
 				printf("|--------------------------------------------------|\n");
 				printf("|                        결과                      |\n");
@@ -540,6 +540,7 @@ void getInfo () {
 	printf("          돈: %f금화\n", players[turn][turnTeam].coin );
 	printf("          턴: %d\n", players[turn][turnTeam].moves);
 	printf("          칼: %s칼\n", players[turn][turnTeam].sword.name );
+	printf(".       등급: %d\n", players[turn][turnTeam].sword.type);
 	printf("      내구도: %d\n", players[turn][turnTeam].sword.durability );
 	printf("    약탈가격: %d금화\n", players[turn][turnTeam].sword.strengh );
 	printf("    포탈위치: x = %d y = %d\n", players[turn][turnTeam].portalX , players[turn][turnTeam].portalY );
@@ -727,15 +728,15 @@ void getInput () {
 		playerOnCoin();
 	}
 
-	if (map[qx][qy] == 'v'){
-		playerOnVillage();
-	}
-
 	for ( int i = 0; i < teamCount[1-turn]; ++i ) {
 		if (map[qx][qy] == players[1-turn][i].name ) {
 			playerOnPlayer( i );
 			break;
 		}
+	}
+
+	if (map[qx][qy] == 'v'){
+		playerOnVillage();
 	}
 
 	players[turn][turnTeam].x = qx;
