@@ -184,7 +184,7 @@ void playerInElectricFactory(int index){
 		scanf("%d", &a);
 		if (a == 1) {
 			
-			players[turn].coin += 204000 *  electricFactories[index].semiConductor;
+			players[turn].coin += 2000000 *  electricFactories[index].semiConductor;
 			
 			printf("가격: 204000 X %d\n", electricFactories[index].semiConductor);
 			electricFactories[index].semiConductor = 0;
