@@ -39,7 +39,7 @@ typedef struct {
 	int x;
 	int y;
 	int name;
-	int hitpoint;
+	int healthpoint;
 	int strikingPower;
 	int defensivePower;
 	int mineral[8];
@@ -105,8 +105,8 @@ Land land12 = {12, 3, {52, 52}, 100};
 Land lands[12] = {land1, land2, land3, land4, land5, land6, land7, land8, land9, land10, land11, land12};
 
 
-Player HyunseoPlayer = { R/2, 0, 'H', 10, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}, {helmetBase, chestplateBase, leggingsBase, bootsBase}, swordFist, {0, 0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0}, 0};
-Player ChanhoPlayer = { R/2, C-1, 'A', 10, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}, {helmetBase, chestplateBase, leggingsBase, bootsBase}, swordFist, {0, 0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0}, 0};
+Player HyunseoPlayer = { R/2, 0, 'H', 20, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}, {helmetBase, chestplateBase, leggingsBase, bootsBase}, swordFist, {0, 0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0}, 0};
+Player ChanhoPlayer = { R/2, C-2, 'A', 20, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}, {helmetBase, chestplateBase, leggingsBase, bootsBase}, swordFist, {0, 0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0}, 0};
 
 Player players[2][16] = { { HyunseoPlayer }, { ChanhoPlayer } };
 
@@ -137,18 +137,12 @@ int turnTeam = 0;
 int px;
 int py;
 int qx;
-int qy;
+int qy ;
 
 int GAME = 1;
 
 void getInput();
 void process();
-
-int hx = 0;
-int hy = 0;
-
-int cx = 0;
-int cy = C-1;
 
  /*void playerOnVillage () {
 
@@ -1029,9 +1023,9 @@ void draw () {
 			else if (m == '9') printf("\x1b[40m" ); // 창고1 
 			else if (m == 'a') printf("\x1b[40m" ); // 창고 2 
 
-			if (i == hx && (j == hy || j == hy + 1)) {
+			if (i == players[0][turnTeam].x && (j == players[0][turnTeam].y || j == players[0][turnTeam].y + 1)) {
 				printf("\x1b[46;30mH");
-			} else if (i == cx && (j == cy || j == cy + 1)) {
+			} else if (i == players[1][turnTeam].x  && (j == players[1][turnTeam].y || j == players[1][turnTeam].y + 1)) {
 				printf("\x1b[45;30mC");
 			} else {
 				printf(" ");
@@ -1050,17 +1044,74 @@ void getInfo () {
 }  
 
 void getInput () {
-	for ( int i = 0; i < 2; ++i ) {
-		for ( int j = 0; j < teamCount[i]; ++j ) {
-			map[players[i][j].x][players[i][j].y] = players[i][j].name;
-		}
-	}
-	for ( int i = 0; i < teamCount[1-turn]; ++i ) {
-		if (map[qx][qy] == players[1-turn][i].name ) {
-			playerOnPlayer( i );
+	char input[10];
+	scanf("%s", input );
+
+	qx = players[turn][turnTeam].x;
+	qy = players[turn][turnTeam].y;
+
+
+	switch(input[0]) {
+		case 'w':
+			qx = players[turn][turnTeam].x - 1;
 			break;
-		}
+		case 's':
+			qx = players[turn][turnTeam].x + 1;
+			break;
+		case 'a':
+			qy = players[turn][turnTeam].y - 2;
+			break;
+		case 'd':
+			qy = players[turn][turnTeam].y + 2;
+			break;
+		default:
+			break;
 	}
+
+	switch(map[players[turn][turnTeam].x][players[turn][turnTeam].y]) {
+		case '0':
+			break;
+		case '1':
+			break;
+		case '2':
+			 qx = players[turn][turnTeam].x;
+			 qy = players[turn][turnTeam].y;
+			break;
+		case '3':
+			break;
+		case '4':
+			playerOnVillage();
+			break;
+		case '5':
+			playerOnLandTeleport();
+			break;
+		case '6':
+			playerOnConferenceRoom();
+			break;
+		case '7':
+			playerOnLotto();
+			break;
+		case '8':
+			playerOnJackPot();
+			break;
+		case '9':
+			playerOnChestOne();
+			break;
+		case '0':
+			playerOnChestTwo();
+			break;
+		default:
+			break;
+	}
+
+
+
+	players[turn][turnTeam].x = qx;
+	players[turn][turnTeam].y = qy;
+}
+
+void process () {
+
 	if ( turnTeam < teamCount[turn] - 1 ) {
 		turnTeam++;
 		printf("성공적으로 턴을 끝냈습니다.\n");
@@ -1069,18 +1120,7 @@ void getInput () {
 		turnTeam = 0;	
 		turn = 1 - turn;
 	}
-}
-
-void process () {
-
-	hx++;
-	hy++;
-	hy++;
-
-	cx++;
-	cy--;
-	cy--;
-	sleep(1);
+	
 
 }
 
@@ -1093,9 +1133,8 @@ int main () {
 	while (GAME) {
 
 		draw();
-		//getInput();
+		getInput();
 		process();
-		missile(36,15);
 
 	}  
 
