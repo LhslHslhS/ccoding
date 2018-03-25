@@ -84,22 +84,22 @@ Potion Mundane = {"이상한", 0, -1 };
 
 Potion potions[5] = { Swiftness, Power, Resistence, Healing, Regeneration };
 
-Player HyunseoPlayer = { R/2, 0, 'H', 30, {0, 0, 0}, 50, 0, Fist, (R+C)/2, 1, 1, "", 0, 0, Mundane, false, 0};
-Player ChanhoPlayer = { R/2, C-1, 'A', 30, {0, 0, 0}, 50, 0, Fist, (R+C)/2, 1, 1, "", 0, 0, Mundane, false, 0};
+Player HyunseoPlayer = { R/2, 0, 'H', 100, {0, 0, 0}, 50, 0, Fist, (R+C)/2, 1, 1, "", 0, 0, Mundane, false, 0};
+Player ChanhoPlayer = { R/2, C-1, 'A', 100, {0, 0, 0}, 50, 0, Fist, (R+C)/2, 1, 1, "", 0, 0, Mundane, false, 0};
 
 // HyunseoPlayer.moves = 3*(R+C);
 // ChanhoPlayer.moves = 3*(R+C);
 
 Player players[2][10] = { { HyunseoPlayer }, { ChanhoPlayer } };
 
-Castle wolhwa    = { 0, 0, 'w', "월화", 3, 0, 0 };
-Castle hyunseo   = { 0, 0, 'h', "현서", 3, 0, 0 };
-Castle chanho    = { 0, 0, 'c', "찬호", 3, 0, 0 };
-Castle daewang   = { 0, 0, 'd', "대왕", 3, 0, 0 };
-Castle joongdong = { 0, 0, 'j', "중동", 3, 0, 0 };
-Castle irwon  = { 0, 0, 'i', "일원", 3, 0, 0};
-Castle sweden  = { 0, 0, 's', "스웨덴", 3, 0, 0};
-Castle uk   = { 0, 0, 'u', "영국", 3, 0, 0};
+Castle wolhwa    = { 0, 0, 'w', "월화", 1, 0, 0 };
+Castle hyunseo   = { 0, 0, 'h', "현서", 1, 0, 0 };
+Castle chanho    = { 0, 0, 'c', "찬호", 1, 0, 0 };
+Castle daewang   = { 0, 0, 'd', "대왕", 1, 0, 0 };
+Castle joongdong = { 0, 0, 'j', "중동", 1, 0, 0 };
+Castle irwon  = { 0, 0, 'i', "일원", 1, 0, 0};
+Castle sweden  = { 0, 0, 's', "스웨덴", 1, 0, 0};
+Castle uk   = { 0, 0, 'u', "영국", 1, 0, 0};
 
 
 
