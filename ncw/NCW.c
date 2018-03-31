@@ -12,7 +12,7 @@ typedef struct {
 	char name[10];
 	int type;
 	int durability;
-	int strength;
+	int strength;   
 	int enchantSharpness;
 	int enchantDurability;
 	int reinForce;
@@ -211,7 +211,7 @@ void playerOnVillage () {
 				printf("에메랄드가 부족합니다.\n");
 			}
 		}
-	} else if (mainMarket == 2)
+	}else if (mainMarket == 2)
 	{
 		char count[4] = {5, 8, 7, 4};
 		int materials;
@@ -305,6 +305,52 @@ void playerOnVillage () {
 		playerOnVillage();
 	}else if (mainMarket == 6)
 	{
+
+		printf("업그레이드할 땅을 선택하여주십시오.\n");
+
+
+		for ( int i = 0; i < 12; ++i ) {
+			if (lands[i].owner - 1 = turn)
+			{
+				printf("%d땅 %d레벨\n", i, lands[i].groundBlock );
+			}
+		}
+
+printf("에메랄드 개수: %d\n",players[turn][turnTeam].mineral[0]);
+		printf("------------------------------\n");
+		printf("1번 땅 (주인: %s)\n", name[ lands[0].owner - 1 ]);
+		printf("2번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
+		printf("3번 땅 (주인: %s)\n", name[ lands[2].owner - 1 ]);
+		printf("3번 땅 (주인: %s)\n", name[ lands[3].owner - 1 ]);
+		printf("4번 땅 (주인: %s)\n", name[ lands[4].owner - 1 ]);
+		printf("5번 땅 (주인: %s)\n", name[ lands[5].owner - 1 ]);
+		printf("6번 땅 (주인: %s)\n", name[ lands[6].owner - 1 ]);
+		printf("7번 땅 (주인: %s)\n", name[ lands[7].owner - 1 ]);
+		printf("8번 땅 (주인: %s)\n", name[ lands[8].owner - 1 ]);
+		printf("9번 땅 (주인: %s)\n", name[ lands[9].owner - 1 ]);
+		printf("10번 땅 (주인: %s)\n", name[ lands[10].owner - 1 ]);
+		printf("11번 땅 (주인: %s)\n", name[ lands[11].owner - 1 ]);
+		printf("12번 땅 (주인: %s)\n", name[ lands[12].owner - 1 ]);
+		printf("------------------------------\n");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	}else if (mainMarket == 7)
 	{
 		printf("------------------------------\n");
@@ -332,12 +378,10 @@ void playerOnVillage () {
 			int outputNumber;
 			int outputCount;
 
-			char mineralNames[8][100] = { "에메랄드", "다이아몬드", "금", "철", "레드스톤", "청금석", "석탄", "돌"};
-			char missileNames[5][100] = { "핵 미사일", "빨간 미사일", "요격 미사일", "뇌관제거기", "레이더"};
-			char rocketNames[5][100] = { "특수 로켓", "안전한 로켓", "희미한 로켓", "완벽한 로켓"};
+			char mineralNames[8][100] = { "에메랄드", "다이아몬드", "금", "철", "레드스톤", "청금석", "석탄", "돌" };
+			char missileNames[5][100] = { "핵 미사일", "빨간 미사일", "요격 미사일", "뇌관제거기", "레이더" };
+			char rocketNames[5][100] = { "특수 로켓", "안전한 로켓", "희미한 로켓", "완벽한 로켓" };
 
-
-			
 			printf("--------------------chest--------inventory------\n");
 			printf("1-1. 에메랄드         %3d개            %3d개\n",chest[turn].chestMineral[0] ,players[turn][turnTeam].mineral[0]);
 			printf("1-2. 다이아몬드       %3d개            %3d개\n",chest[turn].chestMineral[1] ,players[turn][turnTeam].mineral[1]);
@@ -372,7 +416,7 @@ void playerOnVillage () {
 				scanf("%d", &inputNumber2 );
 				printf("꺼낼 물건 개수를 정해주십시오.\n");
 				scanf("%d", &inputCount );
-				if (inputNumber1 == 1)
+				if (inputNumber1 == 1) // 광물
 				{
 					if (inputCount > chest[turn].chestMineral[inputNumber2-1])
 					{
@@ -381,16 +425,16 @@ void playerOnVillage () {
 					}
 					chest[turn].chestMineral[inputNumber2-1] -= inputCount;
 					players[turn][turnTeam].mineral[inputNumber2-1] += inputCount;
-				} else if (inputNumber1 == 2)
+				} else if (inputNumber1 == 2) // 미사일
 				{
 					if (inputCount > chest[turn].chestMissile[inputNumber2-1])
 					{
-						printf("%s이 부족합니다.\n",missilelNames[inputNumber2-1]);
+						printf("%s이 부족합니다.\n",missileNames[inputNumber2-1]);
 						playerOnVillage();
 					} 
 					chest[turn].chestMissile[inputNumber2-1] -= inputCount;
 					players[turn][turnTeam].missile[inputNumber2-1] += inputCount;
-				} else if (inputNumber1 == 3)
+				} else if (inputNumber1 == 3) // 로켓
 				{
 					if (inputCount > chest[turn].chestRocket[inputNumber2-1])
 					{
@@ -399,15 +443,15 @@ void playerOnVillage () {
 					} 
 					chest[turn].chestRocket[inputNumber2-1] -= inputCount;
 					players[turn][turnTeam].rocket[inputNumber2-1] += inputCount;
-				} else if (inputNumber1 == 4)
+				} else if (inputNumber1 == 4) // 황금 사고
 				{
 					if (inputCount > chest[turn].chestGoldenApple)
 					{
 						printf("황금 사과가 부족합니다.\n");
 						playerOnVillage();
 					}
-						chest[turn].chestGoldenApple -= inputCount;
-						players[turn][turnTeam].goldenApple += inputCount;
+					chest[turn].chestGoldenApple -= inputCount;
+					players[turn][turnTeam].goldenApple += inputCount;
 				}
 				printf("아이템 %d개를 상자에서 꺼냈습니다.\n", inputCount);
 				playerOnVillage();
@@ -419,182 +463,47 @@ void playerOnVillage () {
 				scanf("%d", &inputNumber2 );
 				printf("넣을 물건 개수를 정해주십시오.\n");
 				scanf("%d", &inputCount );
-				if (inputNumber1 == 1)
+				if (inputNumber1 == 1) // 광물
 				{
-					if (inputNumber2 == 1)
+					if (inputCount > players[turn][turnTeam].mineral[inputNumber2-1])
 					{
-						if (inputCount > players[turn][turnTeam].mineral[0])
-						{
-							printf("에메랄드가 부족합니다.\n");
-							playerOnVillage();
-						}
-						players[turn][turnTeam].mineral[0] -= inputCount;
-						chest[turn].chestMineral[0] += inputCount;
- 					}else if (inputNumber2 == 2)
-					{
-						if (inputCount > players[turn][turnTeam].mineral[1])
-						{
-							printf("다이아몬드가 부족합니다.\n");
-							playerOnVillage();
-						}
-						players[turn][turnTeam].mineral[1] -= inputCount;
-						chest[turn].chestMineral[1] += inputCount; 
-					}else if (inputNumber2 == 3)
-					{
-						if (inputCount > players[turn][turnTeam].mineral[2])
-						{
-							printf("금이 부족합니다.\n");
-							playerOnVillage();
-						} 
-						players[turn][turnTeam].mineral[2] -= inputCount;
-						chest[turn].chestMineral[2] += inputCount;
-					}else if (inputNumber2 == 4)
-					{
-						if (inputCount > players[turn][turnTeam].mineral[3])
-						{
-							printf("철이 부족합니다.\n");
-							playerOnVillage();
-						}  
-						players[turn][turnTeam].mineral[3] -= inputCount;
-						chest[turn].chestMineral[3] += inputCount;
-					}else if (inputNumber2 == 5)
-					{
-						if (inputCount > players[turn][turnTeam].mineral[4])
-						{
-							printf("레드스톤이 부족합니다.\n");
-							playerOnVillage();
-						}  
-						players[turn][turnTeam].mineral[4] -= inputCount;
-						chest[turn].chestMineral[4] += inputCount;
-					}else if (inputNumber2 == 6)
-					{
-						if (inputCount > players[turn][turnTeam].mineral[5])
-						{
-							printf("청금석이 부족합니다.\n");
-							playerOnVillage();
-						}  
-						players[turn][turnTeam].mineral[5] -= inputCount;
-						chest[turn].chestMineral[5] += inputCount;
-					}else if (inputNumber2 == 7)
-					{
-						if (inputCount > players[turn][turnTeam].mineral[6])
-						{
-							printf("석탄이 부족합니다.\n");
-							playerOnVillage();
-						}  
-						players[turn][turnTeam].mineral[6] -= inputCount;
-						chest[turn].chestMineral[6] += inputCount;
-					}else if (inputNumber2 == 8)
-					{
-						if (inputCount > players[turn][turnTeam].mineral[7])
-						{
-							printf("돌이 부족합니다.\n");
-							playerOnVillage();
-						} 
-						players[turn][turnTeam].mineral[7] -= inputCount;
-						chest[turn].chestMineral[7] += inputCount;
+						printf("%s가 부족합니다.\n", mineralNames[inputNumber2-1]);
+						playerOnVillage();
 					}
-				}else if (inputNumber1 == 2)
+					players[turn][turnTeam].mineral[inputNumber2-1] -= inputCount;
+					chest[turn].chestMineral[inputNumber2-1] += inputCount;
+				} else if (inputNumber1 == 2) // 미사일
 				{
-					if (inputNumber2 == 1)
+					if (inputCount > players[turn][turnTeam].missile[inputNumber2-1])
 					{
-						if (inputCount > players[turn][turnTeam].missile[0])
-						{
-							printf("핵 미사일이 부족합니다.\n");
-							playerOnVillage();
-						} 
-						players[turn][turnTeam].missile[0] -= inputCount;
-						chest[turn].chestMissile[0] += inputCount;
-					}else if (inputNumber2 == 2)
-					{
-						if (inputCount > players[turn][turnTeam].missile[1])
-						{
-							printf(" 빨강 미사일이 부족합니다.\n");
-							playerOnVillage();
-						} 
-						players[turn][turnTeam].missile[1] -= inputCount;
-						chest[turn].chestMissile[1] += inputCount;
-					}else if (inputNumber2 == 3)
-					{
-						if (inputCount > players[turn][turnTeam].missile[2])
-						{
-							printf(" 요격 미사일이 부족합니다.\n");
-							playerOnVillage();
-						}
-						chest[turn].chestMissile[2] -= inputCount;
-						players[turn][turnTeam].missile[2] += inputCount;
-					}else if (inputNumber2 == 4)
-					{
-						if (inputCount > players[turn][turnTeam].missile[3])
-						{
-							printf(" 뇌관 제거기가 부족합니다.\n");
-							playerOnVillage();
-						} 
-						players[turn][turnTeam].missile[3] -= inputCount;
-						chest[turn].chestMissile[3] += inputCount;
-					}else if (inputNumber2 == 5)
-					{
-						if (inputCount > players[turn][turnTeam].missile[4])
-						{
-							printf(" 레이더가 부족합니다.\n");
-							playerOnVillage();
-						} 
-						players[turn][turnTeam].missile[3] -= inputCount;
-						chest[turn].chestMissile[3] += inputCount;
-					}
-				}else if (inputNumber1 == 3)
+						printf("%s이 부족합니다.\n",missileNames[inputNumber2-1]);
+						playerOnVillage();
+					} 
+					players[turn][turnTeam].missile[inputNumber2-1] -= inputCount;
+					chest[turn].chestMissile[inputNumber2-1] += inputCount;
+				} else if (inputNumber1 == 3) // 로켓
 				{
-					if (inputNumber2 == 1)
+					if (inputCount > players[turn][turnTeam].rocket[inputNumber2-1])
 					{
-						if (inputCount > players[turn][turnTeam].rocket[0])
-						{
-							printf("특수 로켓이 부족합니다.\n");
-							playerOnVillage();
-						} 
-						players[turn][turnTeam].rocket[0] -= inputCount;
-						chest[turn].chestRocket[0] += inputCount;
-					}else if (inputNumber2 == 2)
+						printf("%s이 부족합니다.\n",rocketNames[inputNumber2-1]);
+						playerOnVillage();
+					} 
+					players[turn][turnTeam].rocket[inputNumber2-1] -= inputCount;
+					chest[turn].chestRocket[inputNumber2-1] += inputCount;
+				} else if (inputNumber1 == 4) // 황금 사과
+				{
+					if (inputCount > players[turn][turnTeam].goldenApple)
 					{
-						if (inputCount > players[turn][turnTeam].rocket[1])
-						{
-							printf("안전한 로켓이 부족합니다.\n");
-							playerOnVillage();
-						} 
-						players[turn][turnTeam].rocket[1] -= inputCount;
-						chest[turn].chestRocket[1] += inputCount;
-					}else if (inputNumber2 == 3)
-					{
-						if (inputCount > players[turn][turnTeam].rocket[2])
-						{
-							printf("희미한 로켓이 부족합니다.\n");
-							playerOnVillage();
-						} 
-						players[turn][turnTeam].rocket[2] -= inputCount;
-						chest[turn].chestRocket[2] += inputCount;
-					}else if (inputNumber2 == 4)
-					{
-						if (inputCount > players[turn][turnTeam].rocket[3])
-						{
-							printf("완벽한 로켓이 부족합니다.\n");
-							playerOnVillage();
-						}
-						players[turn][turnTeam].rocket[3] -= inputCount;
-						chest[turn].chestRocket[3] += inputCount; 
-					}else if (inputNumber1 == 4)
-					{
-						if (inputCount > players[turn][turnTeam].goldenApple)
-						{
-							printf("황금 사과가 부족합니다.\n");
-							playerOnVillage();
-						}
-						players[turn][turnTeam].goldenApple -= inputCount;
-						chest[turn].chestGoldenApple += inputCount;
+						printf("황금 사과가 부족합니다.\n");
+						playerOnVillage();
 					}
-					printf("아이템 %d개를 상자에 넣었습니다.\n", inputCount);
-					playerOnVillage();
+					players[turn][turnTeam].goldenApple -= inputCount;
+					chest[turn].chestGoldenApple += inputCount;
 				}
+				printf("아이템 %d개를 상자에 넣었습니다.\n", inputCount);
+				playerOnVillage();
 			}
-
+		}
 	}else if (mainMarket == 8)
 	{
 		if (players[turn][turnTeam].mineral[1] < 5)
@@ -801,7 +710,7 @@ void playerOnVillage () {
 	}
 }
 
-}
+
 
 void playerOnPlayer ( int i ) {
 
