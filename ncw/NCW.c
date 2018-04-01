@@ -61,8 +61,8 @@ typedef struct {
 typedef struct {
 	int landNumber;
 	int owner;
-	char landXY[10][10];
-	int groundBlock;
+	char landXY[2];
+	char landData[10][20];
 } Land;
 
 Sword swordDiamond = { "다이아", 4, 4, 8, 0, 0};
@@ -89,18 +89,18 @@ Armor bootsBase = {0, 0, 0, 0, 0};
 Armor armors[8] = {helmetIron, chestplateIron, leggingsIron, bootsIron, helmetDiamond, chestplateDiamond, leggingsDiamond, bootsDiamond};
 Armor armorsBase[4] = {helmetBase, chestplateBase, leggingsBase, bootsBase};
 
-Land land1 = {1, 3, {4, 4}, 100};
-Land land2 = {2, 3, {20, 4}, 100};
-Land land3 = {3, 3, {36, 4}, 100};
-Land land4 = {4, 3, {52, 4}, 100};
-Land land5 = {5, 1, {4, 20}, 100};
-Land land6 = {6, 3, {52, 20}, 100};
-Land land7 = {7, 3, {4, 36}, 100};
-Land land8 = {8, 2, {52, 36}, 100};
-Land land9 = {9, 3, {4, 52}, 100};
-Land land10 = {10, 3, {20, 52}, 100};
-Land land11 = {11, 3, {36, 52}, 100};
-Land land12 = {12, 3, {52, 52}, 100};
+Land land1 = {1, 3, {4, 4}, {}};
+Land land2 = {2, 3, {20, 4}, {}};
+Land land3 = {3, 3, {36, 4}, {}};
+Land land4 = {4, 3, {52, 4}, {}};
+Land land5 = {5, 1, {4, 20}, {}};
+Land land6 = {6, 3, {52, 20}, {}};
+Land land7 = {7, 3, {4, 36}, {}};
+Land land8 = {8, 2, {52, 36}, {}};
+Land land9 = {9, 3, {4, 52}, {}};
+Land land10 = {10, 3, {20, 52}, {}};
+Land land11 = {11, 3, {36, 52}, {}};
+Land land12 = {12, 3, {52, 52}, {}};
 
 Land lands[12] = {land1, land2, land3, land4, land5, land6, land7, land8, land9, land10, land11, land12};
 
@@ -305,53 +305,110 @@ void playerOnVillage () {
 		playerOnVillage();
 	}else if (mainMarket == 6)
 	{
-
-		printf("업그레이드할 땅을 선택하여주십시오.\n");
-
-
-		for ( int i = 0; i < 12; ++i ) {
-			if (lands[i].owner - 1 = turn)
-			{
-				printf("%d땅 %d레벨\n", i, lands[i].groundBlock );
+		int LandNumber;
+		int boomLand;
+		int basicLand;
+		int BLevelLand;
+		int ALevelLand;
+		int SLevelLand;
+		int input;
+		printf("업그레이드할 땅을 정해주십시오.\n");
+		scanf("%d", &LandNumber);
+		if (lands[LandNumber].owner != turn)
+		{
+			printf("땅의 주인이 당신이 아닙니다.\n");
+			playerOnVillage();
+		}
+		for ( int x = 0; x < 10; ++x ) 
+		{
+			for ( int y = 0; y < 20; ++y ) {
+				if (lands[LandNumber].landData[x][y] == 'd')
+				{
+					SLevelLand++;
+				}else if (lands[LandNumber].landData[x][y] == 'c')
+				{
+					ALevelLand++;
+				}else if (lands[LandNumber].landData[x][y] == 'b')
+				{
+					BLevelLand++;
+				}else if (lands[LandNumber].landData[x][y] == 'a')
+				{
+					basicLand++;
+				}else if (lands[LandNumber].landData[x][y] == 'e')
+				{
+					boomLand++;
+				}
 			}
 		}
+		printf("------------------------\n");
+		printf("일반 땅: %d개\n",basicLand );
+		printf("S등급 땅: %d개\n",SLevelLand );
+		printf("A등급 땅: %d개\n",ALevelLand );
+		printf("B등급 땅: %d개\n",BLevelLand );
+		printf("파괴된 땅: %d개\n", boomLand );
+		printf("------------------------\n");
+		printf("1. 땅 회복\n");
+		printf("2. S등급 땅 <- A등급 땅\n");
+		printf("3. A등급 땅 <- B등급 땅\n");
+		printf("4. B등급 땅 <- 기본 땅\n");
+		printf("------------------------\n");
+		scanf("%d", &input );
 
-printf("에메랄드 개수: %d\n",players[turn][turnTeam].mineral[0]);
-		printf("------------------------------\n");
-		printf("1번 땅 (주인: %s)\n", name[ lands[0].owner - 1 ]);
-		printf("2번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
-		printf("3번 땅 (주인: %s)\n", name[ lands[2].owner - 1 ]);
-		printf("3번 땅 (주인: %s)\n", name[ lands[3].owner - 1 ]);
-		printf("4번 땅 (주인: %s)\n", name[ lands[4].owner - 1 ]);
-		printf("5번 땅 (주인: %s)\n", name[ lands[5].owner - 1 ]);
-		printf("6번 땅 (주인: %s)\n", name[ lands[6].owner - 1 ]);
-		printf("7번 땅 (주인: %s)\n", name[ lands[7].owner - 1 ]);
-		printf("8번 땅 (주인: %s)\n", name[ lands[8].owner - 1 ]);
-		printf("9번 땅 (주인: %s)\n", name[ lands[9].owner - 1 ]);
-		printf("10번 땅 (주인: %s)\n", name[ lands[10].owner - 1 ]);
-		printf("11번 땅 (주인: %s)\n", name[ lands[11].owner - 1 ]);
-		printf("12번 땅 (주인: %s)\n", name[ lands[12].owner - 1 ]);
-		printf("------------------------------\n");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	}else if (mainMarket == 7)
+		for ( int i = 0; i < 10; ++i ) {
+			for ( int j = 0; j < 20; ++j ) {
+				if (input == 1)
+				{	
+					if (players[turn][turnTeam].mineral[0] < 1)
+					{
+						printf("돈이 부족하여 업그레이드를 더 이상 못합니다.\n");
+						playerOnVillage();
+					}
+					if (lands[LandNumber].landData[i][j] == 'e')
+					{
+						lands[LandNumber].landData[i][j] = 'a';
+						players[turn][turnTeam].mineral[0]--; 
+					}
+				}else if (input == 2)
+				{
+					if (players[turn][turnTeam].mineral[0] < 3)
+					{
+						printf("돈이 부족하여 업그레이드를 더 이상 못합니다.\n");
+						playerOnVillage();
+					}
+					if (lands[LandNumber].landData[i][j] == 'c')
+					{
+						lands[LandNumber].landData[i][j] = 'd';
+						players[turn][turnTeam].mineral[0] -= 3; 
+					}
+				}else if (input == 3)
+				{
+					if (players[turn][turnTeam].mineral[0] < 2)
+					{
+						printf("돈이 부족하여 업그레이드를 더 이상 못합니다.\n");
+						playerOnVillage();
+					}
+					if (lands[LandNumber].landData[i][j] == 'b')
+					{
+						lands[LandNumber].landData[i][j] = 'c';
+						players[turn][turnTeam].mineral[0] -= 2; 
+					}
+				}else if (input == 4)
+				{
+					if (players[turn][turnTeam].mineral[0] < 1)
+					{
+						printf("돈이 부족하여 업그레이드를 더 이상 못합니다.\n");
+						playerOnVillage();
+					}
+					if (lands[LandNumber].landData[i][j] == 'a')
+					{
+						lands[LandNumber].landData[i][j] = 'b';
+						players[turn][turnTeam].mineral[0] -= 1; 
+					}				
+				}
+			}	
+		}
+		playerOnVillage();
+	} else if (mainMarket == 7)
 	{
 		printf("------------------------------\n");
 		printf("1. 창고 사기 에메랄드 100개\n");
@@ -718,61 +775,61 @@ void playerOnPlayer ( int i ) {
 
 void setupMap () {
 	memcpy( &map[0],   "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
-	memcpy( &map[1],   "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);	
-	memcpy( &map[2],   "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);	
-	memcpy( &map[3],   "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[4],   "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[5],   "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[6],   "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[7],   "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[8],   "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[9],   "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[10],  "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
+	memcpy( &map[1],   "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);	
+	memcpy( &map[2],   "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);	
+	memcpy( &map[3],   "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[4],   "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[5],   "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[6],   "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[7],   "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[8],   "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[9],   "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[10],  "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
 	memcpy( &map[11],  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
 	memcpy( &map[12],  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
 	memcpy( &map[13],  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
 	memcpy( &map[14],  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
 	memcpy( &map[15],  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
-	memcpy( &map[16],  "0000111111111111111111110000000000222222222222222222222222222222222222222222222222220000000000111111111111111111110000", 118);
-	memcpy( &map[17],  "0000111111111111111111110000000000222222222266666666662233333322555555555522222222220000000000111111111111111111110000", 118);
-	memcpy( &map[18],  "0000111111111111111111110000000000222222222266666666662233333322555555555522222222220000000000111111111111111111110000", 118);
-	memcpy( &map[19],  "0000111111111111111111110000000000222222222266666666663333333333555555555522222222220000000000111111111111111111110000", 118);
-	memcpy( &map[20],  "0000111111111111111111110000000000222222222266666666662233333322555555555522222222220000000000111111111111111111110000", 118);
-	memcpy( &map[21],  "0000111111111111111111110000000000222222222266666666662233333322555555555522222222220000000000111111111111111111110000", 118);
-	memcpy( &map[22],  "0000111111111111111111110000000000222222222222222222222233333322222222222222222222220000000000111111111111111111110000", 118);
-	memcpy( &map[23],  "0000111111111111111111110000000000222222222222222222222233333322444444444444444444220000000000111111111111111111110000", 118);
-	memcpy( &map[24],  "0000111111111111111111110000000000222222777777777722222233333322444444444444444444220000000000111111111111111111110000", 118);
-	memcpy( &map[25],  "0000111111111111111111110000000000222222777777777722222233333322444444444444444444220000000000111111111111111111110000", 118);
-	memcpy( &map[26],  "0000000000000000000000000000000000222222222233222222222233333322223322222222222222220000000000000000000000000000000000", 118);
-	memcpy( &map[27],  "0000000000000000000000000000000000223333333333333333333333333333333333333333333333220000000000000000000000000000000000", 118);
-	memcpy( &map[28],  "0000000000000000000000000000000000223333333333333333333333333333333333333333333333220000000000000000000000000000000000", 118);
-	memcpy( &map[29],  "0000000000000000000000000000000000223333333333333333333333333333333333333333333333220000000000000000000000000000000000", 118);
-	memcpy( &map[30],  "0000000000000000000000000000000000222222222233222222222233333322222222222222222222220000000000000000000000000000000000", 118);
-	memcpy( &map[31],  "0000111111111111111111110000000000222222888888888822222233333322222222222222222222220000000000111111111111111111110000", 118);
-	memcpy( &map[32],  "0000111111111111111111110000000000222222888888888822222233333322222222222222222222220000000000111111111111111111110000", 118);
-	memcpy( &map[33],  "0000111111111111111111110000000000222222222222222222222233333322222222222222222222220000000000111111111111111111110000", 118);
-	memcpy( &map[34],  "0000111111111111111111110000000000222222222222222222222233333322222222222222222222220000000000111111111111111111110000", 118);
-	memcpy( &map[35],  "0000111111111111111111110000000000222222222222222222222233333322222222222222222222220000000000111111111111111111110000", 118);
-	memcpy( &map[36],  "0000111111111111111111110000000000222222222222222222222233333322222222222222222222220000000000111111111111111111110000", 118);
-	memcpy( &map[37],  "0000111111111111111111110000000000222222222222229999992233333322aaaaaa222222222222220000000000111111111111111111110000", 118);
-	memcpy( &map[38],  "0000111111111111111111110000000000222222222222229999993333333333aaaaaa222222222222220000000000111111111111111111110000", 118);
-	memcpy( &map[39],  "0000111111111111111111110000000000222222222222229999992233333322aaaaaa222222222222220000000000111111111111111111110000", 118);
-	memcpy( &map[40],  "0000111111111111111111110000000000222222222222222222222222222222222222222222222222220000000000111111111111111111110000", 118);
+	memcpy( &map[16],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111111111111111111111111111111111111111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[17],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111155555555551122222211444444444411111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[18],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111155555555551122222211444444444411111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[19],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111155555555552222222222444444444411111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[20],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111155555555551122222211444444444411111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[21],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111155555555551122222211444444444411111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[22],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111111111111111122222211111111111111111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[23],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111111111111111122222211333333333333333333110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[24],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111666666666611111122222211333333333333333333110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[25],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111666666666611111122222211333333333333333333110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[26],  "0000000000000000000000000000000000111111111122111111111122222211112211111111111111110000000000000000000000000000000000", 118);
+	memcpy( &map[27],  "0000000000000000000000000000000000112222222222222222222222222222222222222222222222110000000000000000000000000000000000", 118);
+	memcpy( &map[28],  "0000000000000000000000000000000000112222222222222222222222222222222222222222222222110000000000000000000000000000000000", 118);
+	memcpy( &map[29],  "0000000000000000000000000000000000112222222222222222222222222222222222222222222222110000000000000000000000000000000000", 118);
+	memcpy( &map[30],  "0000000000000000000000000000000000111111111122111111111122222211111111111111111111110000000000000000000000000000000000", 118);
+	memcpy( &map[31],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111777777777711111122222211111111111111111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[32],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111777777777711111122222211111111111111111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[33],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111111111111111122222211111111111111111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[34],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111111111111111122222211111111111111111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[35],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111111111111111122222211111111111111111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[36],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111111111111111122222211111111111111111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[37],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111111118888881122222211999999111111111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[38],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111111118888882222222222999999111111111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[39],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111111118888881122222211999999111111111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[40],  "0000aaaaaaaaaaaaaaaaaaaa0000000000111111111111111111111111111111111111111111111111110000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
 	memcpy( &map[41],  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
 	memcpy( &map[42],  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
 	memcpy( &map[43],  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
 	memcpy( &map[44],  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
 	memcpy( &map[45],  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
-	memcpy( &map[46],  "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[47],  "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[48],  "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[49],  "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[50],  "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[51],  "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[52],  "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[53],  "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[54],  "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
-	memcpy( &map[55],  "0000111111111111111111110000000000111111111111111111110000000000111111111111111111110000000000111111111111111111110000", 118);
+	memcpy( &map[46],  "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[47],  "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[48],  "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[49],  "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[50],  "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[51],  "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[52],  "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[53],  "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[54],  "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
+	memcpy( &map[55],  "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
 	memcpy( &map[56],  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
 
 }
@@ -792,6 +849,14 @@ void missile (int x, int y) {
 
 void setup () {
 
+	for ( int i = 0; i < 12; ++i ) {
+		for ( int x = 0; x < 10; ++x ) {
+			for ( int y = 0; y < 20; ++y ) {
+				lands[i].landData[x][y] = 'a';
+			}
+		}
+	}
+
 	setupMap();
 
 
@@ -803,16 +868,20 @@ void draw () {
 			char m = map[i][j];
 			
 			if (m == '0') printf("\x1b[47;30m"); // 땅 
-			else if (m == '1') printf("\x1b[40m" ); // 10X10땅  
-			else if (m == '2') printf("\x1b[0;30m" ); // 벽  
-			else if (m == '3') printf("\x1b[43;30m" ); // 스폰 길 
-			else if (m == '4') printf("\x1b[44m" ); // 상점 
-			else if (m == '5') printf("\x1b[41m" ); // 땅 텔포  
-			else if (m == '6') printf("\x1b[45m" ); // 회의 장 
-			else if (m == '7') printf("\x1b[42m" ); // 로또 
-			else if (m == '8') printf("\x1b[42m" ); // 잭 팟 
-			else if (m == '9') printf("\x1b[40m" ); // 창고1 
-			else if (m == 'a') printf("\x1b[40m" ); // 창고 2 
+			else if (m == '1') printf("\x1b[0;30m" ); // 벽  
+			else if (m == '2') printf("\x1b[43;30m" ); // 스폰 길 
+			else if (m == '3') printf("\x1b[44m" ); // 상점 
+			else if (m == '4') printf("\x1b[41m" ); // 땅 텔포  
+			else if (m == '5') printf("\x1b[46m" ); // 회의 장 
+			else if (m == '6') printf("\x1b[42m" ); // 로또 
+			else if (m == '7') printf("\x1b[45m" ); // 잭 팟 
+			else if (m == '8') printf("\x1b[40m" ); // 창고 1 
+			else if (m == '9') printf("\x1b[40m" ); // 창고 2 
+			else if (m == 'a') printf("\x1b[40m" ); // 10X10땅  
+			else if (m == 'b') printf("\x1b[44m" ); // B등급 땅
+			else if (m == 'c') printf("\x1b[41m" ); // A등급 땅
+			else if (m == 'd') printf("\x1b[43m" ); // S등급 땅
+			else if (m == 'e') printf("\x1b[42m" ); // 파괴된 땅
 
 			if (i == players[0][turnTeam].x && (j == players[0][turnTeam].y || j == players[0][turnTeam].y + 1)) {
 				printf("\x1b[46;30mH");
@@ -836,11 +905,14 @@ void getInfo () {
 
 void getInput () {
 	char input[10];
+	printf("player%c:\n", players[turn][turnTeam].name);
 	scanf("%s", input );
+
+	px = players[turn][turnTeam].x;
+	py = players[turn][turnTeam].y;
 
 	qx = players[turn][turnTeam].x;
 	qy = players[turn][turnTeam].y;
-
 
 	switch(input[0]) {
 		case 'w': 
@@ -870,37 +942,45 @@ void getInput () {
 			break;
 	}
 
-	switch(map[players[turn][turnTeam].x][players[turn][turnTeam].y]) {
+	switch(map[qx][qy]) {
 		case '0':
 			break;
 		case '1':
+			qx = px;
+			qy = py;
 			break;
 		case '2':
-			 qx = players[turn][turnTeam].x;
-			 qy = players[turn][turnTeam].y;
-			break;
+			 break;
 		case '3':
-			break;
-		case '4':
 			playerOnVillage();
 			break;
-		case '5':
+		case '4':
 			playerOnLandTeleport();
 			break;
-		case '6':
+		case '5':
 			playerOnConferenceRoom();
 			break;
-		case '7':
+		case '6':
 			playerOnLotto();
 			break;
-		case '8':
+		case '7':
 			playerOnJackPot();
 			break;
-		case '9':
+		case '8':
 			playerOnChestOne();
 			break;
-		case 'a':
+		case '9':
 			playerOnChestTwo();
+			break;
+		case 'a':
+			break;
+		case 'b':
+			break;
+		case 'c':
+			break;
+		case 'd':
+			break;
+		case 'e':
 			break;
 		default:
 			break;
