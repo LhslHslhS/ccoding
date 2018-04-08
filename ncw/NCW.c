@@ -65,6 +65,15 @@ typedef struct {
 	char landData[10][20];
 } Land;
 
+typedef struct {
+	int progress;
+	int missileType;
+	int launchX;
+	int launchY;
+	int targetX;
+	int targetY;
+} Missile;
+
 Sword swordDiamond = { "다이아", 4, 4, 8, 0, 0};
 Sword swordIron = { "철", 3, 6, 7, 0, 0};
 Sword swordStone = { "돌", 2, 8, 6, 0, 0};
@@ -104,6 +113,9 @@ Land land12 = {12, 3, {52, 52}, {}};
 
 Land lands[12] = {land1, land2, land3, land4, land5, land6, land7, land8, land9, land10, land11, land12};
 
+Missile flyingMisssile[2][5];
+
+int flyingMisssileQueue[2][2] = { {0, 0}, {0, 0} };
 
 Player HyunseoPlayer = { R/2, 0, 'H', 20, 0, 0, {1000, 0, 0, 0, 0, 0, 0, 0}, {helmetBase, chestplateBase, leggingsBase, bootsBase}, swordFist, {0, 0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0}, 0};
 Player ChanhoPlayer = { R/2, C-2, 'A', 20, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}, {helmetBase, chestplateBase, leggingsBase, bootsBase}, swordFist, {0, 0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0}, 0};
@@ -112,8 +124,6 @@ Player players[2][16] = { { HyunseoPlayer }, { ChanhoPlayer } };
 
 Chest chest1 = {1, 2, {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0}, 0};
 Chest chest2 = {2, 2, {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0}, 0};
-
-
 
 Chest chest[2] = {chest1, chest2};
 
@@ -131,7 +141,6 @@ char map[R][C+1];
 char input[10];
 
 int timer = 0;
-
 
 int turn = 0;
 int turnTeam = 0;
@@ -903,6 +912,38 @@ void getInfo () {
 
 }
 
+void fireMisssile() {
+	int input;
+	printf("---------------미사일을 선택해주십시오---------------\n");
+	printf("1. 핵 미사일 %d개\n", players[turn][turnTeam].missile[0]);
+	printf("2. 빨강 미사일 %d개\n", players[turn][turnTeam].missile[1]);
+	printf("3. 요격 미사일 %d개\n",  players[turn][turnTeam].missile[2]);
+	printf("-----------------------------------------------\n");
+	scanf("%d", input);
+	if (players[turn][turnTeam].missile[input] < 1)
+	{
+		printf("미사일이 부족합니다.\n");
+		break;
+	}
+	int targetX;
+	int targetY;
+	printf("---------------발사 위치를 정해주십시오---------------\n");
+	scanf("X좌표: %d",targetX );
+	printf("\n");
+	scanf("Y좌표: %d",targetY );
+	if (targetX > R || targetX < 0 || targetY > C || targetY < 0)
+	{
+		printf(" 범위를 다시 정해주십시오\n");
+		break;
+	}
+
+	printf("발사했습니다.\n");
+
+	Missile missile = {0, input, players[turn][turnTeam].x, players[turn][turnTeam].y, targetX, targetY  };
+
+
+}
+
 void getInput () {
 	char input[10];
 	printf("player%c:\n", players[turn][turnTeam].name);
@@ -938,6 +979,9 @@ void getInput () {
 		case 'e':
 		case 'o':
 			getInfo();
+		case 'm':
+		case 'x':
+			fireMisssile();
 		default:
 			break;
 	}
