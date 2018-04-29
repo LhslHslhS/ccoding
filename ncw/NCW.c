@@ -98,18 +98,18 @@ Armor bootsBase = {0, 0, 0, 0, 0};
 Armor armors[8] = {helmetIron, chestplateIron, leggingsIron, bootsIron, helmetDiamond, chestplateDiamond, leggingsDiamond, bootsDiamond};
 Armor armorsBase[4] = {helmetBase, chestplateBase, leggingsBase, bootsBase};
 
-Land land1 = {1, 3, {4, 4}, {}};
-Land land2 = {2, 3, {20, 4}, {}};
-Land land3 = {3, 3, {36, 4}, {}};
-Land land4 = {4, 3, {52, 4}, {}};
-Land land5 = {5, 1, {4, 20}, {}};
-Land land6 = {6, 3, {52, 20}, {}};
-Land land7 = {7, 3, {4, 36}, {}};
-Land land8 = {8, 2, {52, 36}, {}};
-Land land9 = {9, 3, {4, 52}, {}};
-Land land10 = {10, 3, {20, 52}, {}};
-Land land11 = {11, 3, {36, 52}, {}};
-Land land12 = {12, 3, {52, 52}, {}};
+Land land1 = {1, 3, {1, 2}, {}};
+Land land2 = {2, 3, {1, 17}, {}};
+Land land3 = {3, 3, {1, 32}, {}};
+Land land4 = {4, 3, {1, 47}, {}};
+Land land5 = {5, 1, {16, 2}, {}};
+Land land6 = {6, 3, {16, 47}, {}};
+Land land7 = {7, 3, {31, 2}, {}};
+Land land8 = {8, 2, {31, 47}, {}};
+Land land9 = {9, 3, {46, 2}, {}};
+Land land10 = {10, 3, {46, 17}, {}};
+Land land11 = {11, 3, {46, 32}, {}};
+Land land12 = {12, 3, {46, 47}, {}};
 
 Land lands[12] = {land1, land2, land3, land4, land5, land6, land7, land8, land9, land10, land11, land12};
 
@@ -117,8 +117,8 @@ Missile flyingMisssile[2][5];
 
 int flyingMisssileQueue[2][2] = { {0, 0}, {0, 0} };
 
-Player HyunseoPlayer = { R/2, 0, 'H', 20, 0, 0, {1000, 0, 0, 0, 0, 0, 0, 0}, {helmetBase, chestplateBase, leggingsBase, bootsBase}, swordFist, {0, 0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0}, 0};
-Player ChanhoPlayer = { R/2, C-2, 'A', 20, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}, {helmetBase, chestplateBase, leggingsBase, bootsBase}, swordFist, {0, 0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0}, 0};
+Player HyunseoPlayer = { R/2, 0, 'H', 20, 0, 0, {1000, 0, 0, 0, 0, 0, 0, 0}, {helmetBase, chestplateBase, leggingsBase, bootsBase}, swordFist, {20, 5, 5, 5, 5}, {0, 0, 0, 0}, {0, 0, 0}, 0};
+Player ChanhoPlayer = { R/2, C-2, 'A', 20, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}, {helmetBase, chestplateBase, leggingsBase, bootsBase}, swordFist, {20, 5, 5, 5, 5}, {0, 0, 0, 0}, {0, 0, 0}, 0};
 
 Player players[2][16] = { { HyunseoPlayer }, { ChanhoPlayer } };
 
@@ -187,8 +187,7 @@ void playerOnVillage () {
 	printf("에메랄드 개수: %d\n",players[turn][turnTeam].mineral[0]);
 	printf("------------------------------\n");
 	printf("1. 칼 상점\n");
-	printf("2. 방어구 상점\n" );
-	printf("3. 미사일 상점\n" );
+	printf("2. 방어구 상점\n" ); printf("3. 미사일 상점\n" );
 	printf("4. 로켓 상점\n" );
 	printf("5. 땅 상점\n" );
 	printf("6. 땅 업그레이드\n" );
@@ -288,19 +287,18 @@ void playerOnVillage () {
 		char name[3][50] = {"Hyunseo", "Chanho", "X"};
 		printf("에메랄드 개수: %d\n",players[turn][turnTeam].mineral[0]);
 		printf("------------------------------\n");
-		printf("1번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
+		printf("1번 땅 (주인: %s)\n", name[ lands[0].owner - 1 ]);
 		printf("2번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
-		printf("3번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
-		printf("3번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
-		printf("4번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
-		printf("5번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
-		printf("6번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
-		printf("7번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
-		printf("8번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
-		printf("9번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
-		printf("10번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
-		printf("11번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
-		printf("12번 땅 (주인: %s)\n", name[ lands[1].owner - 1 ]);
+		printf("3번 땅 (주인: %s)\n", name[ lands[2].owner - 1 ]);
+		printf("4번 땅 (주인: %s)\n", name[ lands[3].owner - 1 ]);
+		printf("5번 땅 (주인: %s)\n", name[ lands[4].owner - 1 ]);
+		printf("6번 땅 (주인: %s)\n", name[ lands[5].owner - 1 ]);
+		printf("7번 땅 (주인: %s)\n", name[ lands[6].owner - 1 ]);
+		printf("8번 땅 (주인: %s)\n", name[ lands[7].owner - 1 ]);
+		printf("9번 땅 (주인: %s)\n", name[ lands[8].owner - 1 ]);
+		printf("10번 땅 (주인: %s)\n", name[ lands[9].owner - 1 ]);
+		printf("11번 땅 (주인: %s)\n", name[ lands[10].owner - 1 ]);
+		printf("12번 땅 (주인: %s)\n", name[ lands[11].owner - 1 ]);
 		printf("------------------------------\n");
 		scanf("%d", &landMarket);
 		if (lands[landMarket].owner == 1 || lands[landMarket].owner == 2)
@@ -775,13 +773,8 @@ void playerOnVillage () {
 		}
 	}
 }
-
-
-
 void playerOnPlayer ( int i ) {
-
 }
-
 void setupMap () {
 	memcpy( &map[0],   "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
 	memcpy( &map[1],   "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);	
@@ -840,20 +833,6 @@ void setupMap () {
 	memcpy( &map[54],  "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
 	memcpy( &map[55],  "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);
 	memcpy( &map[56],  "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
-
-}
-
-void missile (int x, int y) {
-	//memcpy( &map[50][5], "0000000", 7);
-	for ( int i = -3; i < 4; ++i ) {
-		for ( int j = -7; j < 7; ++j ) {
-			if (map[x + i][y + j] == '1')
-			{
-				map[x + i][y + j] = '5';
-			}
-			
-		}
-	}
 }
 
 void setup () {
@@ -909,7 +888,8 @@ void draw () {
 }
 
 void getInfo () {
-
+	printf(" X: %d\n", players[turn][turnTeam].x);
+	printf(" Y: %d\n", players[turn][turnTeam].y / 2);
 }
 
 void fireMisssile() {
@@ -919,29 +899,93 @@ void fireMisssile() {
 	printf("2. 빨강 미사일 %d개\n", players[turn][turnTeam].missile[1]);
 	printf("3. 요격 미사일 %d개\n",  players[turn][turnTeam].missile[2]);
 	printf("-----------------------------------------------\n");
-	scanf("%d", input);
+	scanf("%d", &input);
 	if (players[turn][turnTeam].missile[input] < 1)
 	{
 		printf("미사일이 부족합니다.\n");
-		break;
+		return;
 	}
 	int targetX;
 	int targetY;
-	printf("---------------발사 위치를 정해주십시오---------------\n");
-	scanf("X좌표: %d",targetX );
+	printf("-------------------------------------------------\n");
+	printf("------------발사 위치를 정해주십시오-------------\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
+	printf("--------------- X 좌표 :          ---------------\n");
+	printf("-------------------------------------------------\n");
+	printf("--------------- y 좌표 :          ---------------\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
+	scanf("%d",&targetX );
+	scanf("%d",&targetY );
+
+	targetY = targetY * 2;
+
 	printf("\n");
-	scanf("Y좌표: %d",targetY );
+	printf("-------------------------------------------------\n");
+	printf("------------발사 위치를 정해주십시오------------\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
+	printf("--------------- X 좌표 : %3d      ---------------\n", targetX);
+	printf("-------------------------------------------------\n");
+	printf("--------------- Y 좌표 : %3d      ---------------\n", targetY);
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
 	if (targetX > R || targetX < 0 || targetY > C || targetY < 0)
 	{
 		printf(" 범위를 다시 정해주십시오\n");
-		break;
+		return;
 	}
 
-	printf("발사했습니다.\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
+	printf("------------------발사했습니다-------------------\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
 
 	Missile missile = {0, input, players[turn][turnTeam].x, players[turn][turnTeam].y, targetX, targetY  };
 
+	int head = flyingMisssileQueue[turn][1];
+	flyingMisssile[turn][head] = missile; 
+	flyingMisssileQueue[turn][1] = (head + 1) % 5;
 
+}
+
+void missileExploded(Missile missle) {
+	printf("Boom! %d %d", missle.targetX, missle.targetY);
+	
+	for ( int i = -3; i < 4; ++i ) {
+		for ( int j = -6; j < 8; ++j ) {
+			if (map[missle.targetX + i][missle.targetY + j] == 'a')
+			{
+				map[missle.targetX + i][missle.targetY + j] = 'e';
+			}
+			
+		}
+	}
+}
+
+int areaOfDestroyed(int l) {
+	int barrier = 0;
+	for ( int i = lands[l].landXY[0]; i < lands[l].landXY[0] + 10; ++i ) {
+		for ( int j = lands[l].landXY[1]; j < lands[l].landXY[1] + 20; j += 2 ) {
+			if (map[i][j] == 'e')
+			{
+				barrier++;
+			}
+		}
+	}
+	return barrier; 
 }
 
 void getInput () {
@@ -976,12 +1020,18 @@ void getInput () {
 		case 'n':
 			qx = 28;
 			qy = 58;
+			break;
 		case 'e':
 		case 'o':
 			getInfo();
+			break;
 		case 'm':
 		case 'x':
 			fireMisssile();
+			break;
+		case 'g':
+			printf("%d\n", areaOfDestroyed(0) );
+			break;
 		default:
 			break;
 	}
@@ -1043,6 +1093,27 @@ void process () {
 		timer++;
 		turnTeam = 0;	
 		turn = 1 - turn;
+	}
+	for ( int i = 0; i < 2; ++i ) {
+		for ( int j = flyingMisssileQueue[i][0]; j != flyingMisssileQueue[i][1]; j = (j + 1) % 5 ) {
+			flyingMisssile[i][j].progress++;
+
+			if (flyingMisssile[i][j].progress == 5) {
+				missileExploded(flyingMisssile[i][j]);
+
+					int tail = flyingMisssileQueue[i][0];
+					flyingMisssileQueue[i][0] = (tail + 1) % 5;
+
+			}
+		}
+	}
+
+	for ( int i = 0; i < 2; ++i ) {
+		printf("Missile progress for %c: ", players[turn][turnTeam].name);
+		for ( int j = flyingMisssileQueue[i][0]; j != flyingMisssileQueue[i][1]; j = (j + 1) % 5 ) {
+			printf("%d ", flyingMisssile[i][j].progress);
+		}
+		printf("\n");
 	}
 	
 }
