@@ -115,6 +115,10 @@ Land lands[12] = {land1, land2, land3, land4, land5, land6, land7, land8, land9,
 
 Missile flyingMisssile[2][5];
 
+char mineralNames[8][100] = { "에메랄드", "다이아몬드", "금", "철", "레드스톤", "청금석", "석탄", "돌" };
+char missileNames[5][100] = { "핵 미사일", "빨간 미사일", "요격 미사일", "뇌관제거기", "레이더" };
+char rocketNames[5][100] = { "특수 로켓", "안전한 로켓", "희미한 로켓", "완벽한 로켓" };
+
 int flyingMisssileQueue[2][2] = { {0, 0}, {0, 0} };
 
 Player HyunseoPlayer = { R/2, 0, 'H', 20, 0, 0, {1000, 0, 0, 0, 0, 0, 0, 0}, {helmetBase, chestplateBase, leggingsBase, bootsBase}, swordFist, {20, 5, 5, 5, 5}, {0, 0, 0, 0}, {0, 0, 0}, 0};
@@ -148,7 +152,7 @@ int turnTeam = 0;
 int px;
 int py;
 int qx;
-int qy ;
+int qy;
 
 int GAME = 1;
 
@@ -187,7 +191,8 @@ void playerOnVillage () {
 	printf("에메랄드 개수: %d\n",players[turn][turnTeam].mineral[0]);
 	printf("------------------------------\n");
 	printf("1. 칼 상점\n");
-	printf("2. 방어구 상점\n" ); printf("3. 미사일 상점\n" );
+	printf("2. 방어구 상점\n" ); 
+	printf("3. 미사일 상점\n" );
 	printf("4. 로켓 상점\n" );
 	printf("5. 땅 상점\n" );
 	printf("6. 땅 업그레이드\n" );
@@ -260,13 +265,13 @@ void playerOnVillage () {
 		printf("------------------------------\n");
 		scanf("%d",&missileMarket );
 		int price[5] = {500, 50, 80, 1, 10};
-		if (players[turn][turnTeam].mineral[0] < price[missileMarket])
+		if (players[turn][turnTeam].mineral[0] < price[missileMarket - 1])
 		{
 			printf("에메랄드가 부족합니다.\n");
 			return;
 		}
-		players[turn][turnTeam].mineral[0] -= price[missileMarket];
-		players[turn][turnTeam].missile[missileMarket]++;
+		players[turn][turnTeam].mineral[0] -= price[missileMarket - 1];
+		players[turn][turnTeam].missile[missileMarket-1]++;
 		printf("구매가 완료되었습니다.\n");
 		playerOnVillage();
 	}else if (mainMarket == 4)
@@ -280,8 +285,8 @@ void playerOnVillage () {
 		printf("------------------------------------------------------------\n");
 		scanf("%d", &rocketMarket);
 		int price[4] = {20, 20, 20 ,60};
-		players[turn][turnTeam].mineral[0] -= price[rocketMarket];
-		players[turn][turnTeam].rocket[rocketMarket]++;
+		players[turn][turnTeam].mineral[0] -= price[rocketMarket-1];
+		players[turn][turnTeam].rocket[rocketMarket-1]++;
 	}else if (mainMarket == 5)
 	{
 		char name[3][50] = {"Hyunseo", "Chanho", "X"};
@@ -301,7 +306,7 @@ void playerOnVillage () {
 		printf("12번 땅 (주인: %s)\n", name[ lands[11].owner - 1 ]);
 		printf("------------------------------\n");
 		scanf("%d", &landMarket);
-		if (lands[landMarket].owner == 1 || lands[landMarket].owner == 2)
+		if (lands[landMarket-1].owner == 1 || lands[landMarket-1].owner == 2)
 		{
 			printf("이미 주인이 있습니다.\n");
 			return;
@@ -321,7 +326,7 @@ void playerOnVillage () {
 		int input;
 		printf("업그레이드할 땅을 정해주십시오.\n");
 		scanf("%d", &LandNumber);
-		if (lands[LandNumber].owner != turn)
+		if (lands[LandNumber-1].owner != turn)
 		{
 			printf("땅의 주인이 당신이 아닙니다.\n");
 			playerOnVillage();
@@ -329,19 +334,19 @@ void playerOnVillage () {
 		for ( int x = 0; x < 10; ++x ) 
 		{
 			for ( int y = 0; y < 20; ++y ) {
-				if (lands[LandNumber].landData[x][y] == 'd')
+				if (lands[LandNumber-1].landData[x][y] == 'd')
 				{
 					SLevelLand++;
-				}else if (lands[LandNumber].landData[x][y] == 'c')
+				}else if (lands[LandNumber-1].landData[x][y] == 'c')
 				{
 					ALevelLand++;
-				}else if (lands[LandNumber].landData[x][y] == 'b')
+				}else if (lands[LandNumber-1].landData[x][y] == 'b')
 				{
 					BLevelLand++;
-				}else if (lands[LandNumber].landData[x][y] == 'a')
+				}else if (lands[LandNumber-1].landData[x][y] == 'a')
 				{
 					basicLand++;
-				}else if (lands[LandNumber].landData[x][y] == 'e')
+				}else if (lands[LandNumber-1].landData[x][y] == 'e')
 				{
 					boomLand++;
 				}
@@ -370,9 +375,9 @@ void playerOnVillage () {
 						printf("돈이 부족하여 업그레이드를 더 이상 못합니다.\n");
 						playerOnVillage();
 					}
-					if (lands[LandNumber].landData[i][j] == 'e')
+					if (lands[LandNumber - 1].landData[i][j] == 'e')
 					{
-						lands[LandNumber].landData[i][j] = 'a';
+						lands[LandNumber - 1].landData[i][j] = 'a';
 						players[turn][turnTeam].mineral[0]--; 
 					}
 				}else if (input == 2)
@@ -382,9 +387,9 @@ void playerOnVillage () {
 						printf("돈이 부족하여 업그레이드를 더 이상 못합니다.\n");
 						playerOnVillage();
 					}
-					if (lands[LandNumber].landData[i][j] == 'c')
+					if (lands[LandNumber - 1].landData[i][j] == 'c')
 					{
-						lands[LandNumber].landData[i][j] = 'd';
+						lands[LandNumber - 1].landData[i][j] = 'd';
 						players[turn][turnTeam].mineral[0] -= 3; 
 					}
 				}else if (input == 3)
@@ -394,9 +399,9 @@ void playerOnVillage () {
 						printf("돈이 부족하여 업그레이드를 더 이상 못합니다.\n");
 						playerOnVillage();
 					}
-					if (lands[LandNumber].landData[i][j] == 'b')
+					if (lands[LandNumber - 1].landData[i][j] == 'b')
 					{
-						lands[LandNumber].landData[i][j] = 'c';
+						lands[LandNumber - 1].landData[i][j] = 'c';
 						players[turn][turnTeam].mineral[0] -= 2; 
 					}
 				}else if (input == 4)
@@ -406,9 +411,9 @@ void playerOnVillage () {
 						printf("돈이 부족하여 업그레이드를 더 이상 못합니다.\n");
 						playerOnVillage();
 					}
-					if (lands[LandNumber].landData[i][j] == 'a')
+					if (lands[LandNumber - 1].landData[i][j] == 'a')
 					{
-						lands[LandNumber].landData[i][j] = 'b';
+						lands[LandNumber - 1].landData[i][j] = 'b';
 						players[turn][turnTeam].mineral[0] -= 1; 
 					}				
 				}
@@ -442,9 +447,7 @@ void playerOnVillage () {
 			int outputNumber;
 			int outputCount;
 
-			char mineralNames[8][100] = { "에메랄드", "다이아몬드", "금", "철", "레드스톤", "청금석", "석탄", "돌" };
-			char missileNames[5][100] = { "핵 미사일", "빨간 미사일", "요격 미사일", "뇌관제거기", "레이더" };
-			char rocketNames[5][100] = { "특수 로켓", "안전한 로켓", "희미한 로켓", "완벽한 로켓" };
+			
 
 			printf("--------------------chest--------inventory------\n");
 			printf("1-1. 에메랄드         %3d개            %3d개\n",chest[turn].chestMineral[0] ,players[turn][turnTeam].mineral[0]);
@@ -776,6 +779,7 @@ void playerOnVillage () {
 void playerOnPlayer ( int i ) {
 }
 void setupMap () {
+
 	memcpy( &map[0],   "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 118);
 	memcpy( &map[1],   "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);	
 	memcpy( &map[2],   "0000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000000000aaaaaaaaaaaaaaaaaaaa0000", 118);	
@@ -897,14 +901,21 @@ void fireMisssile() {
 	printf("---------------미사일을 선택해주십시오---------------\n");
 	printf("1. 핵 미사일 %d개\n", players[turn][turnTeam].missile[0]);
 	printf("2. 빨강 미사일 %d개\n", players[turn][turnTeam].missile[1]);
-	printf("3. 요격 미사일 %d개\n",  players[turn][turnTeam].missile[2]);
 	printf("-----------------------------------------------\n");
 	scanf("%d", &input);
-	if (players[turn][turnTeam].missile[input] < 1)
+	if (players[turn][turnTeam].missile[input-1 ] < 1)
 	{
 		printf("미사일이 부족합니다.\n");
 		return;
 	}
+	printf("---------------로켓을 정해주십시오---------------\n");
+	printf("1. 특수 로켓 %d개 \n", players[turn][turnTeam].rocket[0]);
+	printf("2. 안전한 로켓 %d개 \n", players[turn][turnTeam].rocket[1]);
+	printf("3. 희미한 로켓 %d개 \n", players[turn][turnTeam].rocket[2]);
+	printf("4. 특수 로켓 %d개 \n", players[turn][turnTeam].rocket[3]);	
+	printf("-----------------------------------------------\n");
+
+
 	int targetX;
 	int targetY;
 	printf("-------------------------------------------------\n");
@@ -953,24 +964,45 @@ void fireMisssile() {
 	printf("-------------------------------------------------\n");
 	printf("-------------------------------------------------\n");
 
-	Missile missile = {0, input, players[turn][turnTeam].x, players[turn][turnTeam].y, targetX, targetY  };
+	Missile missile = {0, input - 1, players[turn][turnTeam].x, players[turn][turnTeam].y, targetX, targetY  };
 
 	int head = flyingMisssileQueue[turn][1];
 	flyingMisssile[turn][head] = missile; 
 	flyingMisssileQueue[turn][1] = (head + 1) % 5;
 
 }
+void missileIntercept(){
+	if (players[turn][turnTeam].missile[4] == 0)
+	{
+		getInput();
+	}
+	printf("------------------------------레이더------------------------------\n");
+-----------------------------------------------------------------------------------공사 연기--------------------------------------------------------------------------------------------------------------------------------------------
+}
 
-void missileExploded(Missile missle) {
-	printf("Boom! %d %d", missle.targetX, missle.targetY);
-	
-	for ( int i = -3; i < 4; ++i ) {
-		for ( int j = -6; j < 8; ++j ) {
-			if (map[missle.targetX + i][missle.targetY + j] == 'a')
-			{
-				map[missle.targetX + i][missle.targetY + j] = 'e';
+void missileExploded(Missile missile) {
+
+	printf("%s (%d, %d) \n", missileNames[missile.missileType], missile.targetX, missile.targetY / 2);
+
+	if (missile.missileType == 0)
+	{
+		for ( int i = -3; i < 4; ++i ) {
+			for ( int j = -6; j < 8; ++j ) {
+				if (map[missile.targetX + i][missile.targetY + j] == 'a')
+				{
+					map[missile.targetX + i][missile.targetY + j] = 'e';
+				}
 			}
-			
+		}
+	}else if (missile.missileType == 1)
+	{
+		for ( int i = -1; i < 2; ++i ) {
+			for ( int j = -2; j < 4; ++j ) {
+				if (map[missile.targetX + i][missile.targetY + j] == 'a')
+				{
+					map[missile.targetX + i][missile.targetY + j] = 'e';
+				}
+			}
 		}
 	}
 }
@@ -1003,23 +1035,39 @@ void getInput () {
 		case 'w': 
 		case 'i':
 			qx = players[turn][turnTeam].x - 1;
+			if (qx < 0 )
+			{
+				qx = px;
+			}
 			break;
 		case 's':
 		case 'k':
 			qx = players[turn][turnTeam].x + 1;
+			if (qx > R - 1 )
+			{
+				qx = px;;
+			}
 			break;
 		case 'a':
 		case 'j':
 			qy = players[turn][turnTeam].y - 2;
+			if (qy < 0 )
+			{
+				qy = py;
+			}
 			break;
 		case 'd':
 		case 'l':
 			qy = players[turn][turnTeam].y + 2;
+			if (qy > C - 1 )
+			{
+				qy = py;
+			}
 			break;
 		case 'q':
 		case 'n':
-			qx = 28;
-			qy = 58;
+			qx = R/2;
+			qy = C/2-1;
 			break;
 		case 'e':
 		case 'o':
@@ -1032,9 +1080,16 @@ void getInput () {
 		case 'g':
 			printf("%d\n", areaOfDestroyed(0) );
 			break;
+		case 'n':
+		case 'z':
+			missileIntercept();
+			break;
 		default:
 			break;
 	}
+
+	if (qx < 0 || qx > R) qx = px;
+	if (qy < 0 || qy > C) qy = py;
 
 	switch(map[qx][qy]) {
 		case '0':
@@ -1132,11 +1187,12 @@ int main () {
 
 	}  
 
-	printf("server: 게임이 종료되었습니다.\n");	
+	printf("server: \x1b[31m게\x1b[0m\x1b[33m임\x1b[0m\x1b[32m이\x1b [0m\x1b[36m종\x1b[0m\x1b[34m료\x1b[0m\x1b[31m되\x1b[0m\x1b[33m었\x1b[0m\x1b[32m습\x1b[0m\x1b[36m니\x1b[0m\x1b[34m다\x1b[0m\n");	
 	return 0;
 }	
 
 /*
+
 
 +---------+------------+------------+
 0  color  0 foreground 0 background 0
