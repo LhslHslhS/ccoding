@@ -116,7 +116,7 @@ void playerInElectricFactory(int index);
 void playerInFactory(int index);
 void playerInWild();
 void playerInCityHall();
-void playerInJewelry();
+void x();
 void playerInCasino();
 void playerInBank();
 
