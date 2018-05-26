@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <unistd.h>
 
- long long playerCoin[2] = {30000, 30000};
-int playertimer[2] = {0, 0};
+int playerCoin[2] = {30000, 30000};
+
 
 int bosuk[9][6] = {{1000, 1000, 50, 10, 0, 0},
 				   {5000, 5000, 50, 10, 0, 0},
@@ -44,8 +43,8 @@ void getInput(){
 	{
 		printf("턴: playerC\n");
 	}
-	printf("H: %lld\n", playerCoin[0]);
-	printf("C: %lld\n", playerCoin[1]);
+	printf("H: %d\n", playerCoin[0]);
+	printf("C: %d\n", playerCoin[1]);
 	printf("--------------------------------------------------\n");
 	printf("1.은           %8d원     H: %3d개  C: %3d개\n", bosuk[0][0], bosuk[0][4], bosuk[0][5] ); 
 	printf("2.금           %8d원     H: %3d개  C: %3d개\n", bosuk[1][0], bosuk[1][4], bosuk[1][5] );
@@ -61,7 +60,6 @@ void getInput(){
 	printf("2. 팔기\n");
 	printf("3. 잠자기\n");
 	printf("4. 그래프 보기\n");
-	printf("5. 도박하기 (50만원)\n");
 	printf("--------------------------------------------------\n");
 	scanf("%d", &input);
 
@@ -110,107 +108,8 @@ void getInput(){
 		printf("--------------------------------------------------\n");
 		scanf("%d", &graph);
 		drawGraph(graph);
-	}else if (input == 5)
-	{
-		if (playerCoin[turn] < 500000)
-		{
-			getInput();
-		}
-		playerCoin[turn] -= 500000;
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||  ||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("\n");
-		usleep(550000);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||    ||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("\n");
-		usleep(550000);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||      ||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("\n");
-		usleep(550000);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||        ||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("\n");
-		usleep(550000);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||          ||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("\n");
-		usleep(550000);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||            ||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("\n");
-		usleep(550000);
-		int minusMoney = rand() % 800000;
-		int first = (minusMoney / 1) % 10;
-		int second = (minusMoney / 10) % 10;
-		int third = (minusMoney / 100) % 10;
-		int fourth =(minusMoney / 1000) % 10;
-		int fifth = (minusMoney / 10000) % 10;
-		int sixth = (minusMoney / 100000) % 10;
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||           %d||||||||||\n", first);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("\n");
-		usleep(550000);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||         %d %d||||||||||\n", second, first);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("\n");
-		usleep(550000);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||       %d %d %d||||||||||\n", third, second, first);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("\n");
-		usleep(550000);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||     %d %d %d %d||||||||||\n", fourth, third, second, first);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("\n");
-		usleep(550000);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||   %d %d %d %d %d||||||||||\n", fifth, fourth, third, second, first);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("\n");
-		usleep(550000);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("||||||||||| %d %d %d %d %d %d||||||||||\n", sixth, fifth, fourth, third, second, first);
-		printf("|||||||||||||||||||||||||||||||||\n");
-		printf("|||||||||||||||||||||||||||||||||\n");
 
-		usleep(550000);
-		printf("최종결과: -%d\n",minusMoney );
-		playerCoin[1 - turn] -= minusMoney;
- 	}else if (input != 1 || input != 2 || input != 9 || input != 5)
+	}else if (input != 1 || input != 2 || input != 9)
 	{
 		currentTime++;
 		if (currentTime == 2)
@@ -242,20 +141,15 @@ void getInput(){
 		}
 		getInput();
 	}
-	if (playerCoin[turn] < 0)
-	{
-		playertimer[turn]++;
-	}
-	if (playertimer[turn] == 10)
-	{
-		printf("게임이 종료되었습니다.\n");
-		printf("H: %lld\n", playerCoin[0]);
-		printf("C: %lld\n", playerCoin[1]);
-		return;
-	}
-
 	
 
+
+	
+	if (input == 9)
+	{
+		printf("게임이 종료되었습니다.\n");
+		return;
+	}
 	getInput();
 
 		return;
