@@ -10,7 +10,7 @@ unsigned long price[3] = { 100000, 200000, 500000 };
 char name[3][100] = { "사성주식", "LPG주식", "microhard" };
 int input;
 int warning = 0;
-
+int credit2;
 unsigned long assetAfter, assetBefore, income;
 
 int j, k, l;
@@ -275,7 +275,7 @@ void getInput() {
 			 getInput();
 			break;
 		case 7:
-			int credit2;
+			
 			printf("불법거래자: 신용을 얼마나 올리고 싶은가?\n");
 			scanf("%d",&credit2);
 			printf("나: 한%d만큼요...\n", credit2);
